@@ -1,0 +1,21 @@
+<resources>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_user">请输入用户名</string>
+    <string name="prompt_password">请输入密码</string>
+    <string name="rember_password">记住账号</string>
+    <string name="sign_button">登录</string>
+    <string name="login_error_empty_user">用户名不能为空</string>
+    <string name="login_error_empty_passwd">密码不能为空</string>
+
+
+
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+</resources>

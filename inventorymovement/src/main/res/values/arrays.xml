@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="item_text">
+        <item name="item_0">主项目</item>
+        <item name="item_1">入库管理</item>
+        <item name="item_2">出库管理</item>
+        <item name="item_3">库存盘点</item>
+        <item name="item_4">库存转移</item>
+        <item name="item_5">条码打印</item>
+        <item name="item_6">库存查看</item>
+        <item name="item_7">物资编码申请</item>
+        <item name="item_8">退出</item>
+    </string-array>
+
+    <string-array name="print_item">
+        <item name="item_0">精密仪器库1楼</item>
+        <item name="item_1">精密仪器库2楼</item>
+        <item name="item_2">Q库待验区</item>
+        <!--<item name="item_3">Q库2楼前侧</item>-->
+        <!--<item name="item_4">特种材料库</item>-->
+        <!--<item name="item_5">A106库</item>-->
+        <item name="item_6">Z库1楼中间</item>
+        <!--<item name="item_7">Z库2楼</item>-->
+    </string-array>
+
+</resources>

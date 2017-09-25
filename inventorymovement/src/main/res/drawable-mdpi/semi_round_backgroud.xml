@@ -1,0 +1,9 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/login_bj"
+    android:shape="rectangle">
+    <corners android:radius="60dip" />
+    <stroke
+        android:width="0dp"
+        android:color="@color/login_bj" />
+    <solid android:color="@color/login_bj" />
+</shape>

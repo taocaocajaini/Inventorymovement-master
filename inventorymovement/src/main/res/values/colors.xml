@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="light_gray">#c2c7cc</color>
+    <color name="dark_gray">#3d454c</color>
+    <color name="dark_gray_pressed">#373e44</color>
+    <color name="darker_gray">#1f2226</color>
+    <color name="white">#ffffff</color>
+    <color name="login_bj">#21cea3</color>
+    <color name="body_text_1">#ff000000</color>
+    <color name="body_text_2">#99000000</color>
+    <color name="body_text_disabled">#66000000</color>
+    <color name="body_text_1_inverse">#ffffffff</color>
+    <color name="body_text_2_inverse">#99ffffff</color>
+    <color name="accent_1">#ff29549f</color>
+    <color name="hyperlink">#ffff549f</color>
+    <color name="background_1">#ffffffff</color>
+    <color name="whats_on_separator">#4d000000</color>
+    <color name="all_track_color">#ff222222</color>
+    <color name="block_column_1">#ff0fabff</color>
+    <color name="block_column_2">#ffdf1831</color>
+    <color name="block_column_3">#ff009939</color>
+    <color name="light_black">#393d3f</color><!--浅黑色 -->
+    <color name="light_gray_1">#f5f5f5</color>
+
+    <color name="primary">#009688</color>
+    <color name="colorPrimary">#ff009688</color>
+    <color name="black">#000000</color>
+
+    <color name="holo_blue_bright">#ff00ddff</color>
+    <color name="holo_green_light">#ff99cc00</color>
+    <color name="holo_orange_light">#ffffbb33</color>
+    <color name="holo_red_light">#ffff4444</color>
+
+    <color name="nomal_button_color">#0F75B4</color>
+    <color name="press_button_color">#0399F0</color>
+
+    <color name="gray">#aaa</color>
+
+
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#b0000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+
+</resources>
