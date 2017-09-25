@@ -96,6 +96,12 @@ public class WorkOrderAdapter extends RecyclerView.Adapter<WorkOrderAdapter.View
         notifyDataSetChanged();
     }
 
+    public void removeAllData() {
+        if (workOrders.size() > 0) {
+            workOrders.removeAll(workOrders);
+        }
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         /**
          * CardView*

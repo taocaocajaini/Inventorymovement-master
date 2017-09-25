@@ -22,8 +22,8 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_5"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/dimen_5">
 
             <LinearLayout
                 android:id="@+id/num_linearlayout_id"
@@ -231,7 +231,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_40dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="100dp"
@@ -249,10 +250,12 @@
                     android:textColor="@color/body_text_1"
                     android:textSize="@dimen/dimens_16dp" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_line"
-                android:background="@drawable/line"></View>
+                android:background="@drawable/line"
+                android:visibility="gone"></View>
 
 
         </LinearLayout>

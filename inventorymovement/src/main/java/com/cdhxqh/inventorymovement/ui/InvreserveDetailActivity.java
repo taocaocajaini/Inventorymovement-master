@@ -10,10 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cdhxqh.inventorymovement.R;
-import com.cdhxqh.inventorymovement.model.Invbalances;
 import com.cdhxqh.inventorymovement.model.Invreserve;
 import com.cdhxqh.inventorymovement.utils.MessageUtils;
 
@@ -178,29 +176,31 @@ public class InvreserveDetailActivity extends BaseActivity {
             @Override
             protected String doInBackground(String... strings) {
                 String result = null;
-                String data=null;
-                if(mark==0) {
-                     data = getBaseApplication().getWsService().INV03Issue(getBaseApplication().getUsername(), wonum,
-                            invreserve.itemnum, qtyText.getText().toString(), invreserve.location, binnumText.getText().toString(), lotnumText.getText().toString());
-                }else{
+                String data = null;
+                if (mark == 0) {
                     data = getBaseApplication().getWsService().INV03Issue(getBaseApplication().getUsername(), wonum,
-                            invreserve.itemnum, "-"+qtyText.getText().toString(), invreserve.location, binnumText.getText().toString(), lotnumText.getText().toString());
+                            invreserve.itemnum, qtyText.getText().toString(), invreserve.location, binnumText.getText().toString(), lotnumText.getText().toString());
+                } else {
+                    data = getBaseApplication().getWsService().INV03Issue(getBaseApplication().getUsername(), wonum,
+                            invreserve.itemnum, "-" + qtyText.getText().toString(), invreserve.location, binnumText.getText().toString(), lotnumText.getText().toString());
                 }
-//                Log.i(TAG, "data=" + data);
-                try {
-                    JSONObject jsonObject = new JSONObject(data);
-                    result = jsonObject.getString("msg");
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (data.isEmpty()) {
+                    return "提交失败";
+                } else {
+                    try {
+                        JSONObject jsonObject = new JSONObject(data);
+                        result = jsonObject.getString("msg");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return result;
                 }
-                return result;
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 mProgressDialog.cancel();
-
                 MessageUtils.showMiddleToast(InvreserveDetailActivity.this, s);
                 finish();
             }

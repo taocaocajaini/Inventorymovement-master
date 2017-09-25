@@ -1,9 +1,7 @@
 package com.cdhxqh.inventorymovement.ui;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.View;
@@ -19,7 +17,6 @@ import com.cdhxqh.inventorymovement.api.HttpRequestHandler;
 import com.cdhxqh.inventorymovement.api.ImManager;
 import com.cdhxqh.inventorymovement.utils.AccountUtils;
 import com.cdhxqh.inventorymovement.utils.MessageUtils;
-import com.cdhxqh.inventorymovement.utils.PermissionsChecker;
 import com.tencent.bugly.Bugly;
 
 /**
@@ -57,14 +54,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mUsername = (EditText) findViewById(R.id.login_username_edit);
         mPassword = (EditText) findViewById(R.id.login_password_edit);
         mLogin = (Button) findViewById(R.id.login_login_btn);
+        checkBox = (CheckBox) findViewById(R.id.checkBox);
         boolean isChecked = AccountUtils.getIsChecked(LoginActivity.this);
         if (isChecked) {
+            checkBox.setChecked(isChecked);
             mUsername.setText(AccountUtils.getUserName(LoginActivity.this));
             mPassword.setText(AccountUtils.getUserPassword(LoginActivity.this));
         }
 
 
-        checkBox = (CheckBox) findViewById(R.id.checkBox);
+
 
     }
 
@@ -116,7 +115,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     @Override
                     public void onSuccess(String data) {
 
-//                        MessageUtils.showMiddleToast(LoginActivity.this, data);
                         mProgressDialog.dismiss();
                         if(data!=null) {
                             getBaseApplication().setUsername(mUsername.getText().toString());

@@ -38,10 +38,10 @@ public class ImManager {
     /**
      * 设置库存管理接口*
      */
-    public static String setInvtypeUrl(String search,int curpage, int showcount) {
+    public static String setInvtypeUrl(String search, int curpage, int showcount) {
         if (search.equals("")) {
             return "{'appid':'" + Constants.ALNDOMAIN_APPID + "','objectname':'" + Constants.ALNDOMAIN_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'DOMAINID':'KCTYPE'}}";
-        }else {
+        } else {
             return "{'appid':'" + Constants.ALNDOMAIN_APPID + "','objectname':'" + Constants.ALNDOMAIN_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'DOMAINID':'KCTYPE','DESCRIPTION':'" + search + "'}}";
         }
     }
@@ -75,11 +75,11 @@ public class ImManager {
     /**
      * 设置库存余量接口*
      */
-    public static String sercInvbalancesUrl(String loaction, String search, int curpage, int showcount) {
+    public static String sercInvbalancesUrl(String itemnum, String loaction, String search, int curpage, int showcount) {
         if (search.equals("")) {
-            return "{'appid':'" + Constants.INVBALANCES_APPID + "','objectname':'" + Constants.INVBALANCESS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'" + loaction + "'}}";
+            return "{'appid':'" + Constants.INVBALANCES_APPID + "','objectname':'" + Constants.INVBALANCESS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'" + itemnum + "','LOCATION':'" + loaction + "'}}";
         } else {
-            return "{'appid':'" + Constants.INVBALANCES_APPID + "','objectname':'" + Constants.INVBALANCESS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'" + loaction + "','LOTNUM':'" + search + "'}}";
+            return "{'appid':'" + Constants.INVBALANCES_APPID + "','objectname':'" + Constants.INVBALANCESS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'" + itemnum + "','LOTNUM':'" + search + "'}}";
         }
 
     }
@@ -105,8 +105,8 @@ public class ImManager {
     /**
      * 库存使用情况搜索接口*
      */
-    public static String searchInventoryUrl(String search) {
-        return "{'appid':'" + Constants.INV_APPID + "','objectname':'" + Constants.INVENTORY_NAME + "','option':'read','condition':{'ITEMNUM':'" + search + "'}}";
+    public static String searchInventoryUrl(String search, int curpage, int showcount) {
+        return "{'appid':'" + Constants.INV_APPID + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'" + search + "'}}";
     }
 
     /**
@@ -184,13 +184,13 @@ public class ImManager {
     public static void loginWithUsername(final Context cxt, final String username, final String password, String imei,
                                          final HttpRequestHandler<String> handler) {
 
-
+        Log.e(TAG, "url=" + Constants.SIGN_IN_URL);
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("loginid", username);
         params.put("password", password);
         params.put("imei", imei);
-        client.post(Constants.SIGN_IN_URL,params, new TextHttpResponseHandler() {
+        client.post(Constants.SIGN_IN_URL, params, new TextHttpResponseHandler() {
 
 
             @Override
@@ -220,7 +220,8 @@ public class ImManager {
      * 不分页获取信息方法*
      */
     public static void getData(final Context cxt, String data, final HttpRequestHandler<Results> handler) {
-        Log.i(TAG, "data=" + data);
+        Log.e(TAG, "data=" + data);
+        Log.e(TAG, "url=" + Constants.BASE_URL);
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("data", data);
@@ -246,6 +247,8 @@ public class ImManager {
      * 解析返回的结果--分页*
      */
     public static void getDataPagingInfo(final Context cxt, String data, final HttpRequestHandler<Results> handler) {
+        Log.e(TAG, "data=" + data);
+        Log.e(TAG, "url=" + Constants.BASE_URL);
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("data", data);
@@ -258,12 +261,17 @@ public class ImManager {
 
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                Log.e(TAG, "responseString=" + responseString);
                 Results result = JsonUtils.parsingResults(cxt, responseString);
-
-                SafeHandler.onSuccess(handler, result, result.getCurpage(), result.getShowcount());
+                if (null == result) {
+                    SafeHandler.onFailure(handler, cxt.getString(R.string.get_data_info_fail));
+                } else {
+                    SafeHandler.onSuccess(handler, result, result.getCurpage(), result.getShowcount());
+                }
             }
 
         });
+        client.setConnectTimeout(5 * 1000);
     }
 
 

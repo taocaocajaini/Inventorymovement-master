@@ -380,12 +380,12 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
             intent.putExtra("search_mark", mark);
             intent.setClass(MainActivity.this, SearchActivity.class);
             startActivityForResult(intent, 0);
-        } else if (mark == 1) {
+        } else if (mark == 1) {//跳转至入库管理
             Intent intent = new Intent();
             intent.putExtra("search_mark", mark);
             intent.setClass(MainActivity.this, SearchActivity.class);
             startActivityForResult(intent, 0);
-        } else if (mark == 2) {
+        } else if (mark == 2) {//跳转至出库管理
             Intent intent = new Intent();
             intent.putExtra("search_mark", mark);
             intent.setClass(MainActivity.this, SearchActivity.class);
@@ -401,7 +401,10 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
             intent.setClass(MainActivity.this, SearchActivity.class);
             startActivityForResult(intent, 0);
         } else if (mark == 6) { //跳转至库存转移界面
-            searchButton.setVisibility(View.GONE);
+            Intent intent = new Intent();
+            intent.putExtra("search_mark", mark);
+            intent.setClass(MainActivity.this, SearchActivity.class);
+            startActivityForResult(intent, 0);
         } else if (mark == 7) {
             Intent intent = new Intent();
             intent.putExtra("search_mark", mark);

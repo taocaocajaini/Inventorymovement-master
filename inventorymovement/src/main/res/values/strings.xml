@@ -227,4 +227,5 @@
     <string name="item_check">按项目</string>
     <string name="po_hint">请输入PO值</string>
     <string name="item_hint">请输入项目编号</string>
+    <string name="ffsl_text">发放数量:</string>
 </resources>

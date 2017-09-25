@@ -1,10 +1,14 @@
 package com.cdhxqh.inventorymovement.utils;
 
-import android.util.Log;
-
-import java.io.*;
-import java.net.*;
-import java.util.logging.Logger;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.URLEncoder;
 
 /**
  * Created by Administrator on 2016/12/5.

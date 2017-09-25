@@ -141,7 +141,7 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
 
         mLayoutManager = new LinearLayoutManager(CInvbalancesActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        cInvbalancesAdapter = new CInvbalancesAdapter(CInvbalancesActivity.this,inventory.location);
+        cInvbalancesAdapter = new CInvbalancesAdapter(CInvbalancesActivity.this, inventory.location);
         mRecyclerView.setAdapter(cInvbalancesAdapter);
         mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         mSwipeLayout.setColor(R.color.holo_blue_bright,
@@ -155,7 +155,7 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
         mSwipeLayout.setOnLoadListener(this);
 
 
-        getItemList(inventory.itemnum, "");
+        getItemList(inventory.itemnum, inventory.location, "");
     }
 
 
@@ -177,7 +177,7 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
                 mSwipeLayout.setRefreshing(true);
                 mSwipeLayout.setLoading(true);
                 notLinearLayout.setVisibility(View.GONE);
-                getItemList(inventory.itemnum, search);
+                getItemList(inventory.itemnum, inventory.location, search);
                 return true;
 
             }
@@ -201,8 +201,8 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
      * 获取库存项目信息*
      */
 
-    private void getItemList(String itemnum, String seach) {
-        ImManager.getDataPagingInfo(CInvbalancesActivity.this, ImManager.sercInvbalancesUrl(itemnum, seach, page, 20), new HttpRequestHandler<Results>() {
+    private void getItemList(String itemnum, String location, String seach) {
+        ImManager.getDataPagingInfo(CInvbalancesActivity.this, ImManager.sercInvbalancesUrl(itemnum, location, seach, page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -211,7 +211,6 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
 
-                Log.i(TAG,"results="+results.getResultlist());
                 ArrayList<Invbalances> items = null;
                 try {
                     items = Ig_Json_Model.parseInvbalancesFromString(results.getResultlist());
@@ -227,7 +226,7 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
 
                     } else {
                         if (page == 1) {
-                            cInvbalancesAdapter = new CInvbalancesAdapter(CInvbalancesActivity.this,inventory.location);
+                            cInvbalancesAdapter = new CInvbalancesAdapter(CInvbalancesActivity.this, inventory.location);
                             mRecyclerView.setAdapter(cInvbalancesAdapter);
                         }
                         if (totalPages == page) {
@@ -258,13 +257,13 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
     @Override
     public void onLoad() {
         page++;
-        getItemList(inventory.itemnum, search);
+        getItemList(inventory.itemnum, inventory.location, search);
     }
 
     @Override
     public void onRefresh() {
         page = 1;
-        getItemList(inventory.itemnum, search);
+        getItemList(inventory.itemnum, inventory.location, search);
         mSwipeLayout.setRefreshing(false);
     }
 }

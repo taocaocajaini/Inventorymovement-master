@@ -105,6 +105,12 @@ public class PoAdapter extends RecyclerView.Adapter<PoAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void removeAllData() {
+        if (mPos.size() > 0) {
+            mPos.removeAll(mPos);
+        }
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         /**
          * CardView*

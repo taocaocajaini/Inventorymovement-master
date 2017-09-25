@@ -1,11 +1,9 @@
 package com.cdhxqh.inventorymovement.webserviceclient;
 
 
-import android.content.Context;
 import android.util.Log;
 
 import com.cdhxqh.inventorymovement.constants.Constants;
-import com.cdhxqh.inventorymovement.utils.AccountUtils;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -111,7 +109,7 @@ public class AndroidClientService {
     /**
      * 入库管理接收/退货
      */
-    public String INV02RecByPOLine(String issuetype, String userid, String ponum, String polinenum, int qty, String binnum, String lotnum,String invtype) {
+    public String INV02RecByPOLine(String issuetype, String userid, String ponum, String polinenum, int qty, String binnum, String lotnum, String invtype) {
         Log.i(TAG, "qty=" + qty);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -151,7 +149,7 @@ public class AndroidClientService {
      * 库存出库
      */
     public String INV03Issue(String userid, String wonum, String itemnum, String qty, String storeroom, String binnum, String lotnum) {
-
+        Log.e(TAG, "userid=" + userid + ",wonum=" + wonum + ",itemnum" + itemnum + ",qty=" + qty + ",storeroom=" + storeroom + ",binnum=" + binnum + ",lotnum=" + lotnum);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -168,12 +166,12 @@ public class AndroidClientService {
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
+            Log.e(TAG, "ssss");
             return "";
         }
         String obj = null;
         try {
             obj = soapEnvelope.getResponse().toString();
-            String s = obj;
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -316,7 +314,7 @@ public class AndroidClientService {
     /**
      * 图片上传
      */
-    public String INV09ItemImage(String userid, String itemid,String itemnum,String imagename,String image) {
+    public String INV09ItemImage(String userid, String itemid, String itemnum, String imagename, String image) {
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;

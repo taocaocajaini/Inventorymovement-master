@@ -1,13 +1,10 @@
 package com.cdhxqh.inventorymovement.fragment;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +12,11 @@ import android.widget.LinearLayout;
 
 import com.cdhxqh.inventorymovement.R;
 import com.cdhxqh.inventorymovement.adapter.InvAdapter;
-import com.cdhxqh.inventorymovement.adapter.ItemAdapter;
 import com.cdhxqh.inventorymovement.api.HttpRequestHandler;
 import com.cdhxqh.inventorymovement.api.ImManager;
-import com.cdhxqh.inventorymovement.api.JsonUtils;
 import com.cdhxqh.inventorymovement.api.ig_json.Ig_Json_Model;
 import com.cdhxqh.inventorymovement.bean.Results;
 import com.cdhxqh.inventorymovement.model.Inventory;
-import com.cdhxqh.inventorymovement.model.Item;
 import com.cdhxqh.inventorymovement.wight.SwipeRefreshLayout;
 
 import java.io.IOException;
@@ -101,17 +95,6 @@ public class InVFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         getItemList();
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == RESULT_ADD_TOPIC) {
-//            if (resultCode == Activity.RESULT_OK || data != null) {
-//                final Item item = (Item) data.getParcelableExtra("create_result");
-//                invAdapter.update(new ArrayList<Inventory>() {{
-//                    add(item);
-//                }}, true);
-//            }
-//        }
-//    }
 
 
     /**

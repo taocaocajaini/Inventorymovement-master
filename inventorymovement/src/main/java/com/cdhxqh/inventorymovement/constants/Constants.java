@@ -11,8 +11,12 @@ public class Constants {
     /**
      * 基础接口*
      */
-//    public static final String HTTP_API_URL = "http://182.92.8.94:7002/maximo/mobile/";
-    public static final String HTTP_API_URL = "http://10.192.170.21:9083/maximo/mobile/";
+    //生产IP地址
+//    public static final String HTTP_IP_URL = "http://10.192.170.21:9083";
+    //测试Ip地址
+    public static final String HTTP_IP_URL = "http://10.28.15.14:7003";
+
+    public static final String HTTP_API_URL = HTTP_IP_URL + "/maximo/mobile/";
 
 
     //登陆URL
@@ -20,9 +24,7 @@ public class Constants {
 
     //webservice上传接口
     //远程
-    public static final String webserviceURL = "http://10.192.170.21:9083/meaweb/services/MOBILESERVICE";
-    //本地
-//    public static final String webserviceURL = "http://182.92.8.94:7002/meaweb/services/MOBILESERVICE";
+    public static final String webserviceURL = HTTP_IP_URL+"/meaweb/services/MOBILESERVICE";
 
     public static String getWsUrl(Context context) {
         return webserviceURL;
@@ -139,7 +141,6 @@ public class Constants {
      */
     public static final String RECEIPT = "RECEIPT";//接收
     public static final String RETURN = "RETURN";//退货
-
 
 
     public static final int INVTYPECODE = 10;//库存类型

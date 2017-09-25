@@ -1,16 +1,13 @@
 package com.cdhxqh.inventorymovement.ui;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 
 import com.cdhxqh.inventorymovement.AppManager;
-import com.cdhxqh.inventorymovement.R;
 import com.cdhxqh.inventorymovement.application.BaseApplication;
 
-public class BaseActivity extends Activity {
+public class BaseActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
 
     protected BaseApplication baseApplication;

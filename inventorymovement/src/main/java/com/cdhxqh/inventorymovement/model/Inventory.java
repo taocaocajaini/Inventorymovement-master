@@ -1,13 +1,7 @@
 package com.cdhxqh.inventorymovement.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.instagram.common.json.annotation.JsonField;
 import com.instagram.common.json.annotation.JsonType;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by apple on 15/6/3.

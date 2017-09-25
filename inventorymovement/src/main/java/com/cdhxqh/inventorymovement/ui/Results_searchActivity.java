@@ -412,7 +412,7 @@ public class Results_searchActivity extends BaseActivity implements SwipeRefresh
      * 库存使用情况*
      */
     private void getInvList(String search,  final int mark) {
-        ImManager.getData(Results_searchActivity.this, ImManager.searchInventoryUrl(search), new HttpRequestHandler<Results>() {
+        ImManager.getData(Results_searchActivity.this, ImManager.searchInventoryUrl(search,1,20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);

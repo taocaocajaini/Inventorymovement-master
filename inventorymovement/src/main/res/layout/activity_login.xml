@@ -5,8 +5,7 @@
     android:background="@drawable/login_bj"
     android:baselineAligned="true"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -36,48 +35,51 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_20"
-        android:gravity="center"
         android:orientation="vertical">
 
         <EditText
             android:id="@+id/login_username_edit"
-            android:layout_width="@dimen/dimen_280"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_50"
-            android:drawableRight="@drawable/ic_user"
+            android:layout_marginLeft="@dimen/dimen_20"
+            android:layout_marginRight="@dimen/dimen_20"
             android:background="@drawable/textfield_default"
+            android:drawableRight="@drawable/ic_user"
             android:hint="@string/prompt_user"
             android:singleLine="true"
             android:textColor="#222222" />
 
         <EditText
             android:id="@+id/login_password_edit"
-            android:layout_width="@dimen/dimen_280"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_50"
-            android:drawableRight="@drawable/ic_password"
+            android:layout_marginLeft="@dimen/dimen_20"
+            android:layout_marginRight="@dimen/dimen_20"
             android:background="@drawable/textfield_default"
+            android:drawableRight="@drawable/ic_password"
             android:hint="@string/prompt_password"
             android:inputType="textPassword"
-            android:singleLine="true"
-            android:textColor="#222222"
-            />
+            android:lines="1"
+            android:textColor="@color/cardview_dark_background" />
 
         <CheckBox
             android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="95dp"
-            android:checked="false"
+            android:layout_marginLeft="@dimen/dimen_20"
+            android:button="@drawable/checkbox"
             android:text="@string/rember_password" />
 
         <Button
             android:id="@+id/login_login_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/login_button"
             android:layout_marginLeft="@dimen/dimen_20"
             android:layout_marginRight="@dimen/dimen_20"
             android:layout_marginTop="16dp"
+            android:background="@drawable/login_button"
             android:text="@string/sign_button"
+            android:textColor="@color/white"
             android:textStyle="bold" />
 
 

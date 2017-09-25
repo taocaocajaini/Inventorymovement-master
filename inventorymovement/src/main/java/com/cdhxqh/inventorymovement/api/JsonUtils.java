@@ -48,6 +48,7 @@ public class JsonUtils {
      */
     public static Results parsingResults(Context ctx, String data) {
 
+
         String result = null;
         Results results = null;
         try {
