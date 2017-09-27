@@ -1,6 +1,8 @@
 package com.cdhxqh.inventorymovement.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +11,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.cdhxqh.inventorymovement.R;
@@ -26,6 +28,9 @@ import com.cdhxqh.inventorymovement.model.Invbalances;
 import com.cdhxqh.inventorymovement.model.Inventory;
 import com.cdhxqh.inventorymovement.utils.MessageUtils;
 import com.cdhxqh.inventorymovement.wight.SwipeRefreshLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,9 +55,10 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
     /**
      * 搜索值*
      */
-    private String search;
+    private String search = "";
 
-    private Button chooseBtn; //选择
+
+    private ScrollView scrollView;
     /**
      * RecyclerView*
      */
@@ -77,7 +83,10 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
     private Inventory inventory;
 
     private int mark;
-
+    /**
+     * 进度条*
+     */
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,11 +121,13 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
         backImage = (ImageView) findViewById(R.id.drawer_indicator);
         searchimg = (ImageView) findViewById(R.id.menu_imageview_id);
 
-
+        scrollView = (ScrollView) findViewById(R.id.scrollView_id);
         mRecyclerView = (RecyclerView) findViewById(R.id.list_topics);
         mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
 
         notLinearLayout = (LinearLayout) findViewById(R.id.have_not_data_id);
+
+
     }
 
 
@@ -141,8 +152,8 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
 
         mLayoutManager = new LinearLayoutManager(CInvbalancesActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        cInvbalancesAdapter = new CInvbalancesAdapter(CInvbalancesActivity.this, inventory.location);
-        mRecyclerView.setAdapter(cInvbalancesAdapter);
+
+
         mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         mSwipeLayout.setColor(R.color.holo_blue_bright,
                 R.color.holo_green_light,
@@ -153,11 +164,24 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
 
         mSwipeLayout.setOnRefreshListener(this);
         mSwipeLayout.setOnLoadListener(this);
-
+        initAdapter();
 
         getItemList(inventory.itemnum, inventory.location, "");
     }
 
+
+    private void initAdapter() {
+        cInvbalancesAdapter = new CInvbalancesAdapter(CInvbalancesActivity.this, inventory.location);
+        mRecyclerView.setAdapter(cInvbalancesAdapter);
+        cInvbalancesAdapter.setcOnClickListener(new CInvbalancesAdapter.cOnClickListener() {
+            @Override
+            public void cOnClickListener(Invbalances invbalances) {
+                mProgressDialog = ProgressDialog.show(CInvbalancesActivity.this, null,
+                        "正在提交中...", true, true);
+                confirmData(invbalances);
+            }
+        });
+    }
 
     /**
      * 软键盘*
@@ -175,7 +199,8 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
                                 InputMethodManager.HIDE_NOT_ALWAYS);
                 search = editText.getText().toString();
                 mSwipeLayout.setRefreshing(true);
-                mSwipeLayout.setLoading(true);
+                cInvbalancesAdapter.removeAllData();
+//                mSwipeLayout.setLoading(true);
                 notLinearLayout.setVisibility(View.GONE);
                 getItemList(inventory.itemnum, inventory.location, search);
                 return true;
@@ -217,17 +242,12 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
                     mSwipeLayout.setRefreshing(false);
                     mSwipeLayout.setLoading(false);
                     if (items == null || items.isEmpty()) {
-                        if (cInvbalancesAdapter.getItemCount() != 0) {
-                            MessageUtils.showMiddleToast(CInvbalancesActivity.this, getString(R.string.loading_data_fail));
-                        } else {
-                            notLinearLayout.setVisibility(View.VISIBLE);
-                        }
-
+                        cInvbalancesAdapter.removeAllData();
+                        notLinearLayout.setVisibility(View.VISIBLE);
 
                     } else {
                         if (page == 1) {
-                            cInvbalancesAdapter = new CInvbalancesAdapter(CInvbalancesActivity.this, inventory.location);
-                            mRecyclerView.setAdapter(cInvbalancesAdapter);
+                            initAdapter();
                         }
                         if (totalPages == page) {
                             cInvbalancesAdapter.adddate(items);
@@ -244,11 +264,9 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
             public void onFailure(String error) {
                 mSwipeLayout.setRefreshing(false);
                 mSwipeLayout.setLoading(false);
-                if (cInvbalancesAdapter.getItemCount() != 0) {
-                    MessageUtils.showMiddleToast(CInvbalancesActivity.this, getString(R.string.loading_data_fail));
-                } else {
-                    notLinearLayout.setVisibility(View.VISIBLE);
-                }
+                cInvbalancesAdapter.removeAllData();
+                notLinearLayout.setVisibility(View.VISIBLE);
+
             }
         });
     }
@@ -266,4 +284,41 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
         getItemList(inventory.itemnum, inventory.location, search);
         mSwipeLayout.setRefreshing(false);
     }
+
+
+    /**
+     * 提交数据方法*
+     */
+    private void confirmData(final Invbalances invbalances) {
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                String data = getBaseApplication().getWsService().INV04Invadj(getBaseApplication().getUsername(), invbalances.location,
+                        invbalances.itemnum, invbalances.binnum, invbalances.lotnum, invbalances.curbal);
+
+                return data;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                mProgressDialog.cancel();
+                try {
+                    if (!s.equals("")) {
+                        JSONObject jsonObject = new JSONObject(s);
+                        s = jsonObject.getString("msg");
+                        MessageUtils.showMiddleToast(CInvbalancesActivity.this, s);
+
+                    }
+//                    finish();
+                } catch (JSONException e) {
+                    MessageUtils.showMiddleToast(CInvbalancesActivity.this, "提交失败");
+                }
+
+
+            }
+        }.execute();
+    }
+
+
 }

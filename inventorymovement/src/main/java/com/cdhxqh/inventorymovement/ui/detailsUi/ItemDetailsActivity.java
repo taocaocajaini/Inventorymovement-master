@@ -242,7 +242,6 @@ public class ItemDetailsActivity extends BaseActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                Log.i("mengdd", "onTouch : ");
 
                 return false;
             }

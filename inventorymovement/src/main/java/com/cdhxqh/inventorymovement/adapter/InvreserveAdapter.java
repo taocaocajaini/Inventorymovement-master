@@ -1,8 +1,6 @@
 package com.cdhxqh.inventorymovement.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +10,6 @@ import android.widget.TextView;
 
 import com.cdhxqh.inventorymovement.R;
 import com.cdhxqh.inventorymovement.model.Invreserve;
-import com.cdhxqh.inventorymovement.ui.InvreserveDetailActivity;
 
 import java.util.ArrayList;
 
@@ -25,10 +22,10 @@ public class InvreserveAdapter extends RecyclerView.Adapter<InvreserveAdapter.Vi
     private static final String TAG = "InvreserveAdapter";
     Context mContext;
     ArrayList<Invreserve> invreserves = new ArrayList<Invreserve>();
-    private String wonum;
-    public InvreserveAdapter(Context context,String wonum) {
+    public COnClickListener cOnClickListener;
+
+    public InvreserveAdapter(Context context) {
         mContext = context;
-        this.wonum=wonum;
     }
 
     @Override
@@ -47,19 +44,14 @@ public class InvreserveAdapter extends RecyclerView.Adapter<InvreserveAdapter.Vi
         viewHolder.itemNum.setText(invreserve.itemnum);
         viewHolder.itemDesc.setText(invreserve.description);
 
+
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, InvreserveDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("invreserve", invreserve);
-                bundle.putString("wonum", wonum);
-                intent.putExtras(bundle);
-                mContext.startActivity(intent);
+            public void onClick(View view) {
+                cOnClickListener.cOnClickListener(invreserve);
             }
         });
-
-
     }
 
     @Override
@@ -87,16 +79,23 @@ public class InvreserveAdapter extends RecyclerView.Adapter<InvreserveAdapter.Vi
         notifyDataSetChanged();
     }
 
-    public void adddate(ArrayList<Invreserve> data){
-        if(data.size()>0){
-            for(int i = 0;i < data.size();i++){
-                if(!invreserves.contains(data.get(i))){
+    public void adddate(ArrayList<Invreserve> data) {
+        if (data.size() > 0) {
+            for (int i = 0; i < data.size(); i++) {
+                if (!invreserves.contains(data.get(i))) {
                     invreserves.add(data.get(i));
                 }
             }
         }
         notifyDataSetChanged();
     }
+
+    public void removeAllData() {
+        if (invreserves.size() > 0) {
+            invreserves.removeAll(invreserves);
+        }
+    }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         /**
@@ -129,5 +128,18 @@ public class InvreserveAdapter extends RecyclerView.Adapter<InvreserveAdapter.Vi
             itemDescTitle = (TextView) view.findViewById(R.id.item_desc_title);
             itemDesc = (TextView) view.findViewById(R.id.item_desc_text);
         }
+    }
+
+
+    public interface COnClickListener {
+        public void cOnClickListener(Invreserve item);
+    }
+
+    public COnClickListener getcOnClickListener() {
+        return cOnClickListener;
+    }
+
+    public void setcOnClickListener(COnClickListener cOnClickListener) {
+        this.cOnClickListener = cOnClickListener;
     }
 }

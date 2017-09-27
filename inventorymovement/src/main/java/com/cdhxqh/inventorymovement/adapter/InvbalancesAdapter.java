@@ -1,8 +1,6 @@
 package com.cdhxqh.inventorymovement.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.widget.TextView;
 
 import com.cdhxqh.inventorymovement.R;
 import com.cdhxqh.inventorymovement.model.Invbalances;
-import com.cdhxqh.inventorymovement.ui.InvbalanceDetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +27,9 @@ public class InvbalancesAdapter extends RecyclerView.Adapter<InvbalancesAdapter.
     ArrayList<Invbalances> mItems = new ArrayList<Invbalances>();
 
     public HashMap<Integer, Invbalances> checkedlist = new HashMap<>();
+
+
+    public COnClickListener cOnClickListener;
 
     public InvbalancesAdapter(Context context) {
         mContext = context;
@@ -64,14 +64,21 @@ public class InvbalancesAdapter extends RecyclerView.Adapter<InvbalancesAdapter.
         });
 
 
+//        viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, InvbalanceDetailActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("invbalances", item);
+//                intent.putExtras(bundle);
+//                mContext.startActivity(intent);
+//            }
+//        });
+
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, InvbalanceDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("invbalances", item);
-                intent.putExtras(bundle);
-                mContext.startActivity(intent);
+            public void onClick(View view) {
+                cOnClickListener.cOnClickListener(item);
             }
         });
 
@@ -167,5 +174,18 @@ public class InvbalancesAdapter extends RecyclerView.Adapter<InvbalancesAdapter.
 
             checkBox = (CheckBox) view.findViewById(R.id.invbalances_checkbox_id);
         }
+    }
+
+
+    public interface COnClickListener {
+        public void cOnClickListener(Invbalances item);
+    }
+
+    public COnClickListener getcOnClickListener() {
+        return cOnClickListener;
+    }
+
+    public void setcOnClickListener(COnClickListener cOnClickListener) {
+        this.cOnClickListener = cOnClickListener;
     }
 }

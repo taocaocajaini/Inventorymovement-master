@@ -13,11 +13,9 @@ import android.widget.TextView;
 
 import com.cdhxqh.inventorymovement.R;
 import com.cdhxqh.inventorymovement.adapter.ImagePickerAdapter;
-import com.cdhxqh.inventorymovement.constants.Constants;
 import com.cdhxqh.inventorymovement.utils.AccountUtils;
 import com.cdhxqh.inventorymovement.utils.ImageCompressUtils;
 import com.cdhxqh.inventorymovement.utils.MessageUtils;
-import com.cdhxqh.inventorymovement.webserviceclient.AndroidClientService;
 import com.cdhxqh.inventorymovement.wight.GlideImageLoader;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
@@ -250,6 +248,7 @@ public class WxDemoActivity extends BaseActivity implements ImagePickerAdapter.O
      * 测试图片上传*
      */
     private void startAsyncTask(String fileName) {
+        Log.e(TAG, "fileName=" + fileName);
         File f = new File(fileName);
 
         ImageCompressUtils.from(WxDemoActivity.this)
@@ -278,8 +277,8 @@ public class WxDemoActivity extends BaseActivity implements ImagePickerAdapter.O
                                 @Override
                                 protected String doInBackground(String... strings) {
                                     return getBaseApplication().getWsService().
-                                    INV09ItemImage(AccountUtils.getUserName(WxDemoActivity.this),itemid,itemnum,
-                                            finalname, finalUpdataInfo);
+                                            INV09ItemImage(AccountUtils.getUserName(WxDemoActivity.this), itemid, itemnum,
+                                                    finalname, finalUpdataInfo);
                                 }
 
                                 @Override

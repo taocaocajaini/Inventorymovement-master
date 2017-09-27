@@ -202,6 +202,7 @@ public class InvreserveDetailActivity extends BaseActivity {
                 super.onPostExecute(s);
                 mProgressDialog.cancel();
                 MessageUtils.showMiddleToast(InvreserveDetailActivity.this, s);
+                setResult(1000);
                 finish();
             }
         }.execute();

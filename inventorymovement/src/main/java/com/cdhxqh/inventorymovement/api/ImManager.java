@@ -77,9 +77,9 @@ public class ImManager {
      */
     public static String sercInvbalancesUrl(String itemnum, String loaction, String search, int curpage, int showcount) {
         if (search.equals("")) {
-            return "{'appid':'" + Constants.INVBALANCES_APPID + "','objectname':'" + Constants.INVBALANCESS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'" + itemnum + "','LOCATION':'" + loaction + "'}}";
+            return "{'appid':'" + Constants.INVBALANCES_APPID + "','objectname':'" + Constants.INVBALANCESS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'=" + itemnum + "','LOCATION':'=" + loaction + "'}}";
         } else {
-            return "{'appid':'" + Constants.INVBALANCES_APPID + "','objectname':'" + Constants.INVBALANCESS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'" + itemnum + "','LOTNUM':'" + search + "'}}";
+            return "{'appid':'" + Constants.INVBALANCES_APPID + "','objectname':'" + Constants.INVBALANCESS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ITEMNUM':'=" + itemnum + "','LOTNUM':'" + search + "'}}";
         }
 
     }

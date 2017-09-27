@@ -243,7 +243,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
             case 4://库存转移
                 titleTextView.setText(adapter.getTitle(position));
                 searchButton.setVisibility(View.VISIBLE);
-                if (newPoFragemnt == null) {
+                if (newLocationFragment == null) {
                     newLocationFragment = new LocationFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("text", adapter.getTitle(position));

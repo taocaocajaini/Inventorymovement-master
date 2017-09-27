@@ -342,6 +342,8 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
             @Override
             public void onFailure(String error) {
                 mSwipeLayout.setRefreshing(false);
+                workOrderAdapter.removeAllData();
+                workOrderAdapter.notifyDataSetChanged();
                 notLinearLayout.setVisibility(View.VISIBLE);
             }
         });

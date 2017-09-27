@@ -228,4 +228,5 @@
     <string name="po_hint">请输入PO值</string>
     <string name="item_hint">请输入项目编号</string>
     <string name="ffsl_text">发放数量:</string>
+    <string name="hint_curbal_text">请输入数量</string>
 </resources>

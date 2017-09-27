@@ -183,7 +183,7 @@ public class AndroidClientService {
      * 库存盘点
      */
     public String INV04Invadj(String userid, String storeroom, String itemnum, String binnum, String lotnum, String qty) {
-
+        Log.e(TAG, "qty=" + qty);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -315,6 +315,7 @@ public class AndroidClientService {
      * 图片上传
      */
     public String INV09ItemImage(String userid, String itemid, String itemnum, String imagename, String image) {
+        Log.e(TAG, "userid=" + userid + ",itemnum=" + itemnum + ",imagename=" + imagename);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -322,7 +323,7 @@ public class AndroidClientService {
         soapReq.addProperty("userid", userid);//用户名
 //        soapReq.addProperty("itemid", itemid);//项目id
         soapReq.addProperty("itemnum", itemnum);//项目编号
-        soapReq.addProperty("imagename", imagename);//图片名
+        soapReq.addProperty("imagename", "test.jpg");//图片名
         soapReq.addProperty("image", image);//图片
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(url, timeOut);

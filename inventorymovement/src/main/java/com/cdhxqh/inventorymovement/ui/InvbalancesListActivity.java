@@ -25,7 +25,6 @@ import com.cdhxqh.inventorymovement.api.ig_json.Ig_Json_Model;
 import com.cdhxqh.inventorymovement.bean.Results;
 import com.cdhxqh.inventorymovement.model.Invbalances;
 import com.cdhxqh.inventorymovement.model.Matrectrans;
-import com.cdhxqh.inventorymovement.utils.MessageUtils;
 import com.cdhxqh.inventorymovement.wight.SwipeRefreshLayout;
 
 import java.io.IOException;
@@ -54,7 +53,7 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
     /**
      * 搜索值*
      */
-    private String search="";
+    private String search = "";
 
     private Button chooseBtn; //选择
     /**
@@ -144,21 +143,37 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
 
         mLayoutManager = new LinearLayoutManager(InvbalancesListActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        invbalancesAdapter = new InvbalancesAdapter(InvbalancesListActivity.this);
-        mRecyclerView.setAdapter(invbalancesAdapter);
+        initAdapter();
+
         mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         mSwipeLayout.setColor(R.color.holo_blue_bright,
                 R.color.holo_green_light,
                 R.color.holo_orange_light,
                 R.color.holo_red_light);
         mSwipeLayout.setRefreshing(true);
-        mSwipeLayout.setLoading(true);
+
 
         mSwipeLayout.setOnRefreshListener(this);
         mSwipeLayout.setOnLoadListener(this);
 
 
         getItemList(location, "");
+    }
+
+    /**初始化适配器**/
+    private void initAdapter() {
+        invbalancesAdapter = new InvbalancesAdapter(InvbalancesListActivity.this);
+        mRecyclerView.setAdapter(invbalancesAdapter);
+        invbalancesAdapter.setcOnClickListener(new InvbalancesAdapter.COnClickListener() {
+            @Override
+            public void cOnClickListener(Invbalances item) {
+                Intent intent = new Intent(InvbalancesListActivity.this, InvbalanceDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("invbalances", item);
+                intent.putExtras(bundle);
+                startActivityForResult(intent,0);
+            }
+        });
     }
 
 
@@ -177,8 +192,8 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
                                         .getWindowToken(),
                                 InputMethodManager.HIDE_NOT_ALWAYS);
                 search = editText.getText().toString();
+                invbalancesAdapter.removeAllData();
                 mSwipeLayout.setRefreshing(true);
-                mSwipeLayout.setLoading(true);
                 notLinearLayout.setVisibility(View.GONE);
                 getItemList(location, search);
                 return true;
@@ -249,24 +264,18 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
 
-                Log.i(TAG,"results="+results.getResultlist());
+                Log.i(TAG, "results=" + results.getResultlist());
                 ArrayList<Invbalances> items = null;
                 try {
                     items = Ig_Json_Model.parseInvbalancesFromString(results.getResultlist());
                     mSwipeLayout.setRefreshing(false);
                     mSwipeLayout.setLoading(false);
                     if (items == null || items.isEmpty()) {
-                        if (invbalancesAdapter.getItemCount() != 0) {
-                            MessageUtils.showMiddleToast(InvbalancesListActivity.this, getString(R.string.loading_data_fail));
-                        } else {
-                            notLinearLayout.setVisibility(View.VISIBLE);
-                        }
-
-
+                        invbalancesAdapter.removeAllData();
+                        notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
                         if (page == 1) {
-                            invbalancesAdapter = new InvbalancesAdapter(InvbalancesListActivity.this);
-                            mRecyclerView.setAdapter(invbalancesAdapter);
+                            initAdapter();
                         }
                         if (totalPages == page) {
                             invbalancesAdapter.adddate(items);
@@ -283,11 +292,8 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
             public void onFailure(String error) {
                 mSwipeLayout.setRefreshing(false);
                 mSwipeLayout.setLoading(false);
-                if (invbalancesAdapter.getItemCount() != 0) {
-                    MessageUtils.showMiddleToast(InvbalancesListActivity.this, getString(R.string.loading_data_fail));
-                } else {
-                    notLinearLayout.setVisibility(View.VISIBLE);
-                }
+                invbalancesAdapter.removeAllData();
+                notLinearLayout.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -296,8 +302,7 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
     @Override
     public void onLoad() {
         page++;
-        Log.i(TAG,"location="+location+",search="+search);
-
+        mSwipeLayout.setLoading(true);
         getItemList(location, search);
     }
 
@@ -305,6 +310,7 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
     public void onRefresh() {
         page = 1;
         getItemList(location, search);
-        mSwipeLayout.setRefreshing(false);
+        mSwipeLayout.setRefreshing(true);
     }
+
 }

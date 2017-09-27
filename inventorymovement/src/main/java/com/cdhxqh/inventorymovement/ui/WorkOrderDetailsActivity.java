@@ -1,5 +1,6 @@
 package com.cdhxqh.inventorymovement.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -74,7 +75,6 @@ public class WorkOrderDetailsActivity extends BaseActivity implements SwipeRefre
     private InvreserveAdapter invreserveAdapter;
 
 
-
     private int page = 1;
 
     private PopupWindow popupWindow;
@@ -113,8 +113,7 @@ public class WorkOrderDetailsActivity extends BaseActivity implements SwipeRefre
         mRecyclerView = (RecyclerView) findViewById(R.id.list_topics);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        invreserveAdapter = new InvreserveAdapter(WorkOrderDetailsActivity.this,workOrder.wonum);
-        mRecyclerView.setAdapter(invreserveAdapter);
+
         mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         mSwipeLayout.setColor(R.color.holo_blue_bright,
                 R.color.holo_green_light,
@@ -126,8 +125,24 @@ public class WorkOrderDetailsActivity extends BaseActivity implements SwipeRefre
         mSwipeLayout.setOnLoadListener(this);
 
         notLinearLayout = (LinearLayout) findViewById(R.id.have_not_data_id);
-
+        initAdapter();
         getInvreserveList(workOrder.wonum);
+    }
+
+    private void initAdapter() {
+        invreserveAdapter = new InvreserveAdapter(WorkOrderDetailsActivity.this);
+        mRecyclerView.setAdapter(invreserveAdapter);
+        invreserveAdapter.setcOnClickListener(new InvreserveAdapter.COnClickListener() {
+            @Override
+            public void cOnClickListener(Invreserve item) {
+                Intent intent = new Intent(WorkOrderDetailsActivity.this, InvreserveDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("invreserve", item);
+                bundle.putString("wonum", workOrder.wonum);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, 0);
+            }
+        });
     }
 
 
@@ -154,7 +169,6 @@ public class WorkOrderDetailsActivity extends BaseActivity implements SwipeRefre
             finish();
         }
     };
-
 
 
     /**
@@ -189,8 +203,7 @@ public class WorkOrderDetailsActivity extends BaseActivity implements SwipeRefre
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
                         if (page == 1) {
-                            invreserveAdapter = new InvreserveAdapter(WorkOrderDetailsActivity.this,wonum);
-                            mRecyclerView.setAdapter(invreserveAdapter);
+                            initAdapter();
                         }
                         if (totalPages == page) {
                             invreserveAdapter.adddate(items);
@@ -221,5 +234,18 @@ public class WorkOrderDetailsActivity extends BaseActivity implements SwipeRefre
     public void onRefresh() {
         page++;
         getInvreserveList(workOrder.wonum);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode){
+            case 1000: //提交刷新
+                mSwipeLayout.setRefreshing(true);
+                invreserveAdapter.removeAllData();
+                invreserveAdapter.notifyDataSetChanged();
+                getInvreserveList(workOrder.wonum);
+                break;
+        }
     }
 }

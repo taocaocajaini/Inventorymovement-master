@@ -1,6 +1,5 @@
 package com.cdhxqh.inventorymovement.adapter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -14,9 +13,7 @@ import android.widget.TextView;
 
 import com.cdhxqh.inventorymovement.R;
 import com.cdhxqh.inventorymovement.model.Invbalances;
-import com.cdhxqh.inventorymovement.model.Matrectrans;
 import com.cdhxqh.inventorymovement.ui.BinChooseActivity;
-import com.cdhxqh.inventorymovement.ui.MatrectransActivity;
 
 import java.util.ArrayList;
 
@@ -51,6 +48,7 @@ public class BinAdapter extends RecyclerView.Adapter<BinAdapter.ViewHolder> {
         viewHolder.itemNum.setText(item.lotnum.equals("") ? " " : item.lotnum);
         viewHolder.itemDesc.setText(item.curbal);
         viewHolder.itemBin.setText(item.binnum);
+        viewHolder.invtypeText.setText(item.invtype);
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +60,7 @@ public class BinAdapter extends RecyclerView.Adapter<BinAdapter.ViewHolder> {
                 intent.putExtras(bundle);
                 if (activity.requestCode == 1) {
                     activity.setResult(1, intent);
-                }else if(activity.requestCode == 3){
+                } else if (activity.requestCode == 3) {
                     activity.setResult(3, intent);
                 }
                 activity.finish();
@@ -142,6 +140,9 @@ public class BinAdapter extends RecyclerView.Adapter<BinAdapter.ViewHolder> {
 
         public ImageView avatar;
 
+        //库存类别
+        public TextView invtypeText;
+
         public ViewHolder(View view) {
             super(view);
             cardView = (CardView) view.findViewById(R.id.card_container);
@@ -152,6 +153,7 @@ public class BinAdapter extends RecyclerView.Adapter<BinAdapter.ViewHolder> {
             itemDesc = (TextView) view.findViewById(R.id.item_desc_text);
             avatar = (ImageView) view.findViewById(R.id.avatar);
             itemBin = (TextView) view.findViewById(R.id.item_binnum_text);
+            invtypeText = (TextView) view.findViewById(R.id.item_invtype_text);
         }
     }
 }

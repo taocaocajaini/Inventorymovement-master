@@ -1,14 +1,11 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/body_text_2_inverse"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+
 
         <include
             android:id="@+id/title_id"
@@ -33,7 +30,6 @@
             <EditText
                 android:id="@+id/search_edittext_id"
                 android:layout_width="match_parent"
-
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/back_image_id"
@@ -57,13 +53,23 @@
 
         </RelativeLayout>
 
-        <include
-            layout="@layout/fragment_item"
+        <ScrollView
+            android:id="@+id/scrollView_id"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/title_id"></include>
+            android:layout_below="@+id/title_id"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
 
-    </RelativeLayout>
+
+            <include
+                layout="@layout/fragment_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/title_search_layout"></include>
+        </ScrollView>
 
 
-</FrameLayout>
+
+
+</RelativeLayout>
