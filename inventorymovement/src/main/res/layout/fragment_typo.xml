@@ -6,11 +6,11 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:id="@+id/item_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/actionbar_dimen">
+        android:layout_height="@dimen/actionbar_dimen"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <RadioGroup
             android:id="@+id/radiolayout"

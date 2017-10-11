@@ -15,8 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
+        android:fillViewport="true"
         android:foreground="?android:selectableItemBackground"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:scrollbars="vertical">
 
         <LinearLayout
 
@@ -28,9 +30,10 @@
             <LinearLayout
                 android:id="@+id/num_linearlayout_id"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_40dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="2dp">
 
                 <TextView
                     android:id="@+id/item_num_title"
@@ -59,10 +62,11 @@
             <LinearLayout
                 android:id="@+id/desc_linearlayout_id"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_40dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/view_1_id"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="2dp">
 
                 <TextView
                     android:id="@+id/item_desc_title"
@@ -90,10 +94,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_40dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/view_2_id"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="2dp">
 
                 <TextView
                     android:id="@+id/item_in20_title"
@@ -119,9 +124,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_40dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="2dp">
 
                 <TextView
                     android:layout_width="100dp"
@@ -135,7 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/have_not_data"
-                    android:textColor="@color/body_text_1"
+                    android:textColor="@color/holo_red_light"
                     android:textSize="@dimen/dimens_16dp" />
             </LinearLayout>
 
@@ -146,9 +152,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_40dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="2dp">
 
                 <TextView
                     android:layout_width="100dp"
@@ -174,9 +181,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_40dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="2dp">
 
                 <TextView
                     android:layout_width="100dp"
@@ -201,10 +209,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_40dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/view_6_id"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="2dp">
 
                 <TextView
                     android:layout_width="100dp"
@@ -229,9 +238,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_40dp"
+                android:layout_height="wrap_content"
+
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:padding="2dp"
                 android:visibility="gone">
 
                 <TextView
@@ -257,6 +268,11 @@
                 android:background="@drawable/line"
                 android:visibility="gone"></View>
 
+            <include
+                layout="@layout/fragment_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/title_search_layout"></include>
 
         </LinearLayout>
 

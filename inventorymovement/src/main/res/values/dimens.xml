@@ -17,4 +17,5 @@
     <dimen name="dimens_18dp">18dp</dimen>
     <dimen name="dimens_100dp">100dp</dimen>
     <dimen name="dimen_line">0.5dp</dimen>
+    <dimen name="dimens_2dp">2dp</dimen>
 </resources>

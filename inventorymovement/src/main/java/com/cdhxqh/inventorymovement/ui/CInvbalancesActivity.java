@@ -136,7 +136,7 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
      */
     private void initView() {
 
-        titleTextView.setText(inventory.location);
+        titleTextView.setText(inventory.location + "," + inventory.itemnum);
         backImage.setOnClickListener(backImageOnClickListener);
         searchimg.setBackgroundResource(R.drawable.ic_search);
         searchimg.setVisibility(View.VISIBLE);

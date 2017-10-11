@@ -48,7 +48,7 @@ public class BinAdapter extends RecyclerView.Adapter<BinAdapter.ViewHolder> {
         viewHolder.itemNum.setText(item.lotnum.equals("") ? " " : item.lotnum);
         viewHolder.itemDesc.setText(item.curbal);
         viewHolder.itemBin.setText(item.binnum);
-        viewHolder.invtypeText.setText(item.invtype);
+        viewHolder.invtypeText.setText(item.kctypedesc);
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -14,15 +14,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
 
         <CheckBox
             android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:button="@drawable/checkbox">
-        </CheckBox>
+            android:layout_centerVertical="true"></CheckBox>
+
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
@@ -72,6 +73,30 @@
                 android:ellipsize="end"
                 android:ems="14"
                 android:hint="@string/hint_item_desc_title"
+                android:singleLine="true"
+                android:textColor="#de000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/count_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_desc_title"
+                android:layout_marginTop="5dp"
+                android:text="@string/count_text"
+                android:textColor="#de000000"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/count_text_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_desc_text"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/count_title"
+                android:hint="请输入数量"
+                android:ems="14"
+                android:inputType="number"
                 android:singleLine="true"
                 android:textColor="#de000000"
                 android:textSize="16sp" />

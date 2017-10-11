@@ -29,14 +29,15 @@ public class InvAdapter extends RecyclerView.Adapter<InvAdapter.ViewHolder> {
     ArrayList<Inventory> mInventorys = new ArrayList<Inventory>();
 
     private int mark; //库存情况/库存盘点
-    public InvAdapter(Context context,int mark) {
+
+    public InvAdapter(Context context, int mark) {
         mContext = context;
-        this.mark=mark;
+        this.mark = mark;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_pd_item, viewGroup, false);
         return new ViewHolder(v);
     }
 
@@ -47,14 +48,15 @@ public class InvAdapter extends RecyclerView.Adapter<InvAdapter.ViewHolder> {
 
         viewHolder.itemNum.setText(inv.itemnum);
         viewHolder.itemDesc.setText(inv.itemdesc);
+        viewHolder.locText.setText(inv.location);
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                if(mark==1){
+                if (mark == 1) {
                     intent.setClass(mContext, InvDetailsActivity.class);
-                }else{
+                } else {
                     intent.setClass(mContext, CInvbalancesActivity.class);
                 }
 
@@ -95,10 +97,10 @@ public class InvAdapter extends RecyclerView.Adapter<InvAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void adddate(ArrayList<Inventory> data){
-        if(data.size()>0){
-            for(int i = 0;i < data.size();i++){
-                if(!mInventorys.contains(data.get(i))){
+    public void adddate(ArrayList<Inventory> data) {
+        if (data.size() > 0) {
+            for (int i = 0; i < data.size(); i++) {
+                if (!mInventorys.contains(data.get(i))) {
                     mInventorys.add(data.get(i));
                 }
             }
@@ -121,11 +123,15 @@ public class InvAdapter extends RecyclerView.Adapter<InvAdapter.ViewHolder> {
          */
         public TextView itemDesc;
 
+        //库房
+        public TextView locText;
+
         public ViewHolder(View view) {
             super(view);
             cardView = (RelativeLayout) view.findViewById(R.id.card_container);
             itemNum = (TextView) view.findViewById(R.id.item_num_text);
             itemDesc = (TextView) view.findViewById(R.id.item_desc_text);
+            locText = (TextView) view.findViewById(R.id.invbalance_location_text);
         }
     }
 }

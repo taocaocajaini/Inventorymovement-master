@@ -32,6 +32,8 @@ public class Invbalances extends Entity {
     public String invtype; //库存类别
     @JsonField(fieldName = "unitcost")
     public String unitcost; //单位成本
+    @JsonField(fieldName = "kctypedesc")
+    public String kctypedesc; //库存类别名称
 
     public String getInvtype() {
         return invtype;
@@ -111,5 +113,21 @@ public class Invbalances extends Entity {
 
     public void setSiteid(String siteid) {
         this.siteid = siteid;
+    }
+
+    public String getUnitcost() {
+        return unitcost;
+    }
+
+    public void setUnitcost(String unitcost) {
+        this.unitcost = unitcost;
+    }
+
+    public String getKctypedesc() {
+        return kctypedesc;
+    }
+
+    public void setKctypedesc(String kctypedesc) {
+        this.kctypedesc = kctypedesc;
     }
 }

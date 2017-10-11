@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,12 +42,13 @@ public class PrintitemAdapter extends RecyclerView.Adapter<PrintitemAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(final ViewHolder viewHolder, int i) {
         final Printitem poline = mPos.get(i);
 
 
         viewHolder.itemNum.setText(poline.itemnum);
         viewHolder.itemDesc.setText(poline.description);
+        viewHolder.countEditText.setText(poline.printqty);
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +65,7 @@ public class PrintitemAdapter extends RecyclerView.Adapter<PrintitemAdapter.View
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 poline.ischeck = isChecked;
+                poline.setPrintqty(viewHolder.countEditText.getText().toString());
             }
         });
 
@@ -113,10 +116,10 @@ public class PrintitemAdapter extends RecyclerView.Adapter<PrintitemAdapter.View
         notifyDataSetChanged();
     }
 
-    public ArrayList<Printitem> getChecked(){
+    public ArrayList<Printitem> getChecked() {
         ArrayList<Printitem> printitems = new ArrayList<>();
-        for (Printitem poline : mPos){
-            if (poline.ischeck){
+        for (Printitem poline : mPos) {
+            if (poline.ischeck) {
                 printitems.add(poline);
             }
         }
@@ -143,12 +146,18 @@ public class PrintitemAdapter extends RecyclerView.Adapter<PrintitemAdapter.View
          */
         public CheckBox checkBox;
 
+        /**
+         * 数量
+         **/
+        public EditText countEditText;
+
         public ViewHolder(View view) {
             super(view);
             cardView = (RelativeLayout) view.findViewById(R.id.card_container);
             itemNum = (TextView) view.findViewById(R.id.item_num_text);
             itemDesc = (TextView) view.findViewById(R.id.item_desc_text);
             checkBox = (CheckBox) view.findViewById(R.id.checkBox);
+            countEditText = (EditText) view.findViewById(R.id.count_text_id);
         }
     }
 }

@@ -1,18 +1,32 @@
 package com.cdhxqh.inventorymovement.ui.detailsUi;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cdhxqh.inventorymovement.R;
+import com.cdhxqh.inventorymovement.adapter.KcckInvbalancesAdapter;
+import com.cdhxqh.inventorymovement.api.HttpRequestHandler;
+import com.cdhxqh.inventorymovement.api.ImManager;
+import com.cdhxqh.inventorymovement.api.ig_json.Ig_Json_Model;
+import com.cdhxqh.inventorymovement.bean.Results;
+import com.cdhxqh.inventorymovement.model.Invbalances;
 import com.cdhxqh.inventorymovement.model.Inventory;
 import com.cdhxqh.inventorymovement.ui.BaseActivity;
+import com.cdhxqh.inventorymovement.wight.SwipeRefreshLayout;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * 库存使用情况详情
  */
-public class InvDetailsActivity extends BaseActivity {
+public class InvDetailsActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
     private static final String TAG = "InvDetailsActivity";
 
@@ -43,6 +57,23 @@ public class InvDetailsActivity extends BaseActivity {
 
     private Inventory inventory;
 
+    /**
+     * RecyclerView*
+     */
+    RecyclerView mRecyclerView;
+
+    RecyclerView.LayoutManager mLayoutManager;
+
+    SwipeRefreshLayout mSwipeLayout;
+
+    /**
+     * 暂无数据*
+     */
+    LinearLayout notLinearLayout;
+
+    KcckInvbalancesAdapter kcckInvbalancesAdapter;
+
+    private int page = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +110,11 @@ public class InvDetailsActivity extends BaseActivity {
         locationdescTextView = (TextView) findViewById(R.id.inv_locationdesc_text);
         lotnumTextView = (TextView) findViewById(R.id.inv_lotnum_text);
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.list_topics);
+        mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+
+        notLinearLayout = (LinearLayout) findViewById(R.id.have_not_data_id);
+
 
     }
 
@@ -101,6 +137,24 @@ public class InvDetailsActivity extends BaseActivity {
             lotnumTextView.setText(inventory.lotnum);
         }
 
+        mLayoutManager = new LinearLayoutManager(InvDetailsActivity.this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+
+        mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        mSwipeLayout.setColor(R.color.holo_blue_bright,
+                R.color.holo_green_light,
+                R.color.holo_orange_light,
+                R.color.holo_red_light);
+        mSwipeLayout.setRefreshing(true);
+        mSwipeLayout.setLoading(false);
+
+        mSwipeLayout.setOnRefreshListener(this);
+        mSwipeLayout.setOnLoadListener(this);
+        initAdapter();
+
+        getItemList(inventory.itemnum, inventory.location, "");
+
 
     }
 
@@ -112,4 +166,74 @@ public class InvDetailsActivity extends BaseActivity {
     };
 
 
+    @Override
+    public void onRefresh() {
+
+        page = 1;
+        getItemList(inventory.itemnum, inventory.location, "");
+        mSwipeLayout.setRefreshing(false);
+
+    }
+
+    @Override
+    public void onLoad() {
+        page++;
+        getItemList(inventory.itemnum, inventory.location, "");
+    }
+
+    private void initAdapter() {
+        kcckInvbalancesAdapter = new KcckInvbalancesAdapter(InvDetailsActivity.this, inventory.location);
+        mRecyclerView.setAdapter(kcckInvbalancesAdapter);
+
+    }
+
+
+    /**
+     * 获取库存项目信息*
+     */
+
+    private void getItemList(String itemnum, String location, String seach) {
+        ImManager.getDataPagingInfo(InvDetailsActivity.this, ImManager.sercInvbalancesUrl(itemnum, location, seach, page, 20), new HttpRequestHandler<Results>() {
+            @Override
+            public void onSuccess(Results results) {
+                Log.i(TAG, "data=" + results);
+            }
+
+            @Override
+            public void onSuccess(Results results, int totalPages, int currentPage) {
+
+                ArrayList<Invbalances> items = null;
+                try {
+                    items = Ig_Json_Model.parseInvbalancesFromString(results.getResultlist());
+                    mSwipeLayout.setRefreshing(false);
+                    mSwipeLayout.setLoading(false);
+                    if (items == null || items.isEmpty()) {
+                        kcckInvbalancesAdapter.removeAllData();
+                        notLinearLayout.setVisibility(View.VISIBLE);
+
+                    } else {
+                        if (page == 1) {
+                            initAdapter();
+                        }
+                        if (totalPages == page) {
+                            kcckInvbalancesAdapter.adddate(items);
+                        }
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(String error) {
+                mSwipeLayout.setRefreshing(false);
+                mSwipeLayout.setLoading(false);
+                kcckInvbalancesAdapter.removeAllData();
+                notLinearLayout.setVisibility(View.VISIBLE);
+
+            }
+        });
+    }
 }

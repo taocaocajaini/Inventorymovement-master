@@ -3,6 +3,7 @@ package com.cdhxqh.inventorymovement.fragment;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,14 +13,18 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.cdhxqh.inventorymovement.R;
 import com.cdhxqh.inventorymovement.adapter.PrintitemAdapter;
@@ -38,7 +43,7 @@ import java.util.ArrayList;
 /**
  * 条码打印*
  */
-public class TypoFragment extends Fragment{
+public class TypoFragment extends Fragment {
     private static final String TAG = "TypoFragment";
     private static final int RESULT_ADD_TOPIC = 100;
 
@@ -86,9 +91,9 @@ public class TypoFragment extends Fragment{
             @Override
             public void handleMessage(Message msg) {
                 initProgressBar();
-                mProgressDialog.setMessage("正在打印第"+msg.arg1+"行");
+                mProgressDialog.setMessage("正在打印第" + msg.arg1 + "行");
                 mProgressDialog.show();
-                if (msg.arg1==items.size()){
+                if (msg.arg1 == items.size()) {
                     mProgressDialog.dismiss();
                 }
             }
@@ -130,14 +135,44 @@ public class TypoFragment extends Fragment{
         searchImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mProgressDialog = ProgressDialog.show(getActivity(), null,
+                        getString(R.string.hint_loading_text), true, true);
                 getPoLineList();
             }
         });
 
         button.setOnClickListener(printOnClickListener);
-
+        searchnumText.setOnEditorActionListener(editTextOnEditorActionListener);
 //        searchnumText.setText("dh-16922");//101686
     }
+
+
+    /**
+     * 软键盘*
+     */
+    private TextView.OnEditorActionListener editTextOnEditorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+
+                // 先隐藏键盘
+                ((InputMethodManager) searchnumText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
+                        .hideSoftInputFromWindow(
+                                getActivity().getCurrentFocus()
+                                        .getWindowToken(),
+                                InputMethodManager.HIDE_NOT_ALWAYS);
+                mProgressDialog = ProgressDialog.show(getActivity(), null,
+                        getString(R.string.hint_loading_text), true, true);
+                ponum = searchnumText.getText().toString();
+                notLinearLayout.setVisibility(View.GONE);
+                getPoLineList();
+                return true;
+
+            }
+            return false;
+        }
+    };
+
 
     /**
      * 获取库存项目信息*
@@ -148,7 +183,7 @@ public class TypoFragment extends Fragment{
         String url = null;
         if (poRadio.isChecked()) {
             url = ImManager.setPolineUrl(ponum, 1, 20);
-        }else if (itemRadio.isChecked()){
+        } else if (itemRadio.isChecked()) {
             url = ImManager.serItemUrl(ponum, 1, 20);
         }
         ImManager.getDataPagingInfo(getActivity(), url, new HttpRequestHandler<Results>() {
@@ -159,17 +194,14 @@ public class TypoFragment extends Fragment{
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
+                mProgressDialog.dismiss();
                 try {
                     items = Ig_Json_Model.parsePrintitemFromString(results.getResultlist());
                     if (items == null || items.isEmpty()) {
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-//                        for (int i = 0;i < items.size();i++){
-//                            items.get(i).IsPrint = "否";
-//                            items.get(i).PrintQty = 1;
-//                        }
-                            polineAdapter = new PrintitemAdapter(getActivity(),ponum);
-                            mRecyclerView.setAdapter(polineAdapter);
+                        polineAdapter = new PrintitemAdapter(getActivity(), ponum);
+                        mRecyclerView.setAdapter(polineAdapter);
                         polineAdapter.adddate(items);
                     }
 
@@ -196,12 +228,10 @@ public class TypoFragment extends Fragment{
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 //            builder.setIcon(R.drawable.ic_launcher);
             builder.setTitle("请选择打印机名");
-            builder.setSingleChoiceItems(R.array.print_item, -1, new DialogInterface.OnClickListener()
-            {
+            builder.setSingleChoiceItems(R.array.print_item, -1, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    switch (which){
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
                         case 0:
                             sendData("PRINTER1");
                             break;
@@ -234,10 +264,9 @@ public class TypoFragment extends Fragment{
         }
     };
 
-    private void sendData(String printer){
+    private void sendData(String printer) {
         final ArrayList<Printitem> items = polineAdapter.getChecked();
         if (items != null && items.size() != 0) {
-//            new ChildThread().start();
             Printitem poline = new Printitem();
             for (int i = 0; i < items.size(); i++) {
                 poline = items.get(i);
@@ -250,7 +279,7 @@ public class TypoFragment extends Fragment{
                         + poline.storeloc + "|"
                         + getText(poline.companyname) + "|"
                         + poline.ponum + "|";
-                MessageUtils.showMiddleToast(getActivity(), "正在打印第"+(i+1)+"个");
+                MessageUtils.showMiddleToast(getActivity(), "正在打印第" + (i + 1) + "个");
                 new AsyncTask<String, String, String>() {
                     @Override
                     protected String doInBackground(String... strings) {
@@ -269,15 +298,8 @@ public class TypoFragment extends Fragment{
                         MessageUtils.showMiddleToast(getActivity(), s);
                     }
                 }.execute();
-//                if (mChildHandler != null) {
-//                    //发送消息给子线程
-//                    Message childMsg = mChildHandler.obtainMessage();
-//                    childMsg.obj = data;
-//                    childMsg.arg1 = i;
-//                    mChildHandler.sendMessage(childMsg);
-//                }
             }
-        }else {
+        } else {
             MessageUtils.showMiddleToast(getActivity(), "请选择打印项");
         }
     }
@@ -290,7 +312,7 @@ public class TypoFragment extends Fragment{
                 @Override
                 public void handleMessage(Message msg) {
                     Message toMain = mMainHandler.obtainMessage();
-                    SocketClient.sendAndGetReply("10.28.5.240", 9000, 120000,msg.obj.toString().getBytes());
+                    SocketClient.sendAndGetReply("10.28.5.240", 9000, 120000, msg.obj.toString().getBytes());
                     mMainHandler.sendMessage(toMain);
                 }
 
@@ -308,11 +330,11 @@ public class TypoFragment extends Fragment{
         }
     }
 
-    private String getText(String text){
-        if (text==null||text.equals("")){
+    private String getText(String text) {
+        if (text == null || text.equals("")) {
             return "";
-        }else {
-            return text.contains("|")?text.replace("|", "/"):text;
+        } else {
+            return text.contains("|") ? text.replace("|", "/") : text;
         }
     }
 }

@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.cdhxqh.inventorymovement.api.ig_json.JsonHelper;
 import com.cdhxqh.inventorymovement.model.Invbalances;
-import com.cdhxqh.inventorymovement.model.Inventory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.instagram.common.json.JsonFactoryHolder;
@@ -100,6 +99,9 @@ public final class Invbalances_JsonHelper
             return true;
         } else if ("unitcost".equals(fieldName)) {
             instance.unitcost = jp.getValueAsString();
+            return true;
+        }else if ("KCTYPEDESC".equals(fieldName)) {
+            instance.kctypedesc = jp.getValueAsString();
             return true;
         }
 
