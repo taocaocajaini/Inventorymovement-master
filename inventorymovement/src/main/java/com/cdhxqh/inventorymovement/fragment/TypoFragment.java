@@ -35,6 +35,7 @@ import com.cdhxqh.inventorymovement.bean.Results;
 import com.cdhxqh.inventorymovement.model.Printitem;
 import com.cdhxqh.inventorymovement.utils.MessageUtils;
 import com.cdhxqh.inventorymovement.utils.SocketClient;
+import com.cdhxqh.inventorymovement.wight.SwipeRefreshLayout;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -43,7 +44,7 @@ import java.util.ArrayList;
 /**
  * 条码打印*
  */
-public class TypoFragment extends Fragment {
+public class TypoFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
     private static final String TAG = "TypoFragment";
     private static final int RESULT_ADD_TOPIC = 100;
 
@@ -55,6 +56,8 @@ public class TypoFragment extends Fragment {
     RecyclerView mRecyclerView;
 
     RecyclerView.LayoutManager mLayoutManager;
+
+    SwipeRefreshLayout mSwipeLayout;
 
     PrintitemAdapter polineAdapter;
     /**
@@ -70,6 +73,8 @@ public class TypoFragment extends Fragment {
 
     private Handler mMainHandler, mChildHandler;
     private ProgressDialog mProgressDialog;
+
+    private int page = 1;
 
 //    private static final int mark=0; //库存转移标识
 
@@ -132,11 +137,26 @@ public class TypoFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        mSwipeLayout.setColor(R.color.holo_blue_bright,
+                R.color.holo_green_light,
+                R.color.holo_orange_light,
+                R.color.holo_red_light);
+
+
+        mSwipeLayout.setOnRefreshListener(this);
+        mSwipeLayout.setOnLoadListener(this);
+
+        polineAdapter = new PrintitemAdapter(getActivity(), ponum);
+        mRecyclerView.setAdapter(polineAdapter);
+
+
         searchImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mProgressDialog = ProgressDialog.show(getActivity(), null,
                         getString(R.string.hint_loading_text), true, true);
+                polineAdapter.removeAllData();
                 getPoLineList();
             }
         });
@@ -163,6 +183,7 @@ public class TypoFragment extends Fragment {
                                 InputMethodManager.HIDE_NOT_ALWAYS);
                 mProgressDialog = ProgressDialog.show(getActivity(), null,
                         getString(R.string.hint_loading_text), true, true);
+                polineAdapter.removeAllData();
                 ponum = searchnumText.getText().toString();
                 notLinearLayout.setVisibility(View.GONE);
                 getPoLineList();
@@ -179,12 +200,13 @@ public class TypoFragment extends Fragment {
      */
 
     private void getPoLineList() {
+
         ponum = searchnumText.getText().toString();
         String url = null;
         if (poRadio.isChecked()) {
-            url = ImManager.setPolineUrl(ponum, 1, 20);
+            url = ImManager.setPolineUrl(ponum, page, 20);
         } else if (itemRadio.isChecked()) {
-            url = ImManager.serItemUrl(ponum, 1, 20);
+            url = ImManager.serItemUrl(ponum, page, 20);
         }
         ImManager.getDataPagingInfo(getActivity(), url, new HttpRequestHandler<Results>() {
             @Override
@@ -195,13 +217,15 @@ public class TypoFragment extends Fragment {
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
                 mProgressDialog.dismiss();
+                mSwipeLayout.setRefreshing(false);
+                mSwipeLayout.setLoading(false);
+                notLinearLayout.setVisibility(View.GONE);
                 try {
                     items = Ig_Json_Model.parsePrintitemFromString(results.getResultlist());
                     if (items == null || items.isEmpty()) {
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-                        polineAdapter = new PrintitemAdapter(getActivity(), ponum);
-                        mRecyclerView.setAdapter(polineAdapter);
+
                         polineAdapter.adddate(items);
                     }
 
@@ -302,6 +326,21 @@ public class TypoFragment extends Fragment {
         } else {
             MessageUtils.showMiddleToast(getActivity(), "请选择打印项");
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        mSwipeLayout.setRefreshing(true);
+        polineAdapter.removeAllData();
+        page = 1;
+        getPoLineList();
+    }
+
+    @Override
+    public void onLoad() {
+        mSwipeLayout.setLoading(false);
+        page++;
+        getPoLineList();
     }
 
     class ChildThread extends Thread {

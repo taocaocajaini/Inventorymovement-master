@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,6 @@ public class PrintitemAdapter extends RecyclerView.Adapter<PrintitemAdapter.View
     Context mContext;
     String ponum;
     ArrayList<Printitem> mPos = new ArrayList<Printitem>();
-//    V2EXDataSource mDataSource = Application.getDataSource();
 
     public PrintitemAdapter(Context context, String ponum) {
         mContext = context;
@@ -42,13 +43,13 @@ public class PrintitemAdapter extends RecyclerView.Adapter<PrintitemAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
         final Printitem poline = mPos.get(i);
 
 
         viewHolder.itemNum.setText(poline.itemnum);
         viewHolder.itemDesc.setText(poline.description);
-        viewHolder.countEditText.setText(poline.printqty);
+
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +57,6 @@ public class PrintitemAdapter extends RecyclerView.Adapter<PrintitemAdapter.View
                 Intent intent = new Intent(mContext, PrintPolineDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("printitem", poline);
-//                bundle.putString("ponum", ponum);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }
@@ -68,6 +68,30 @@ public class PrintitemAdapter extends RecyclerView.Adapter<PrintitemAdapter.View
                 poline.setPrintqty(viewHolder.countEditText.getText().toString());
             }
         });
+
+
+        if (viewHolder.countEditText.getTag() instanceof TextWatcher) {
+            viewHolder.countEditText.removeTextChangedListener((TextWatcher) viewHolder.countEditText.getTag());
+        }
+
+        viewHolder.countEditText.setText(null == poline.printqty ? "1" : poline.printqty);
+        TextWatcher watcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                poline.setPrintqty(editable.toString());
+            }
+        };
+        viewHolder.countEditText.addTextChangedListener(watcher);
+        viewHolder.countEditText.setTag(watcher);
 
     }
 
@@ -94,6 +118,13 @@ public class PrintitemAdapter extends RecyclerView.Adapter<PrintitemAdapter.View
         mPos = data;
 
         notifyDataSetChanged();
+    }
+
+
+    public void removeAllData() {
+        if (mPos.size() > 0) {
+            mPos.removeAll(mPos);
+        }
     }
 
     public void adddate(ArrayList<Printitem> data) {

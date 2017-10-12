@@ -71,13 +71,13 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_container"
+
+    <com.cdhxqh.inventorymovement.wight.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/button_layout"
-        android:layout_below="@+id/item_layout"
-        android:orientation="vertical">
+        android:layout_below="@+id/item_layout">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list_topics"
@@ -87,7 +87,7 @@
             android:layout_marginRight="8dp">
 
         </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
+    </com.cdhxqh.inventorymovement.wight.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/have_not_data_id"
