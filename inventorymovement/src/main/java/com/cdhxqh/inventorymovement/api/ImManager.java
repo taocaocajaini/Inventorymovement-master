@@ -12,6 +12,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import org.apache.http.Header;
+
 
 /**
  * Created by apple on 15/5/27.
@@ -183,7 +185,6 @@ public class ImManager {
      */
     public static void loginWithUsername(final Context cxt, final String username, final String password, String imei,
                                          final HttpRequestHandler<String> handler) {
-
         Log.e(TAG, "url=" + Constants.SIGN_IN_URL);
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
@@ -192,23 +193,21 @@ public class ImManager {
         params.put("imei", imei);
         client.post(Constants.SIGN_IN_URL, params, new TextHttpResponseHandler() {
 
-
             @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.i(TAG, "SstatusCode=" + statusCode + "responseString=" + responseString);
                 SafeHandler.onFailure(handler, IMErrorType.errorMessage(cxt, IMErrorType.ErrorLoginFailure));
             }
 
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                {
-                    Log.i(TAG, "SstatusCode=" + statusCode + "responseString=" + responseString);
-                    if (statusCode == 200) {
-                        String errmsg = JsonUtils.parsingAuthStr(cxt, responseString);
-                        SafeHandler.onSuccess(handler, errmsg);
-                    }
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.i(TAG, "SstatusCode=" + statusCode + "responseString=" + responseString);
+                if (statusCode == 200) {
+                    String errmsg = JsonUtils.parsingAuthStr(cxt, responseString);
+                    SafeHandler.onSuccess(handler, errmsg);
                 }
             }
+
 
         });
 
@@ -227,17 +226,17 @@ public class ImManager {
         params.put("data", data);
         client.get(Constants.BASE_URL, params, new TextHttpResponseHandler() {
             @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 SafeHandler.onFailure(handler, cxt.getString(R.string.get_data_info_fail));
             }
 
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 Results result = JsonUtils.parsingResults1(cxt, responseString);
                 Log.i(TAG, "getCurpage()=" + result.getCurpage() + " result.getShowcount()=" + result.getShowcount());
                 SafeHandler.onSuccess(handler, result, result.getCurpage(), result.getShowcount());
             }
+
 
         });
     }
@@ -254,19 +253,19 @@ public class ImManager {
         params.put("data", data);
         client.get(Constants.BASE_URL, params, new TextHttpResponseHandler() {
             @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 SafeHandler.onFailure(handler, cxt.getString(R.string.get_data_info_fail));
             }
 
 
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 Log.e(TAG, "responseString=" + responseString);
                 Results result = JsonUtils.parsingResults(cxt, responseString);
                 if (null == result) {
                     SafeHandler.onFailure(handler, cxt.getString(R.string.get_data_info_fail));
                 } else {
-                    SafeHandler.onSuccess(handler, result, result.getCurpage(), result.getShowcount());
+                    SafeHandler.onSuccess(handler, result, result.getShowcount(), result.getCurpage());
                 }
             }
 
@@ -294,12 +293,12 @@ public class ImManager {
 
 
             @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 SafeHandler.onFailure(handler, IMErrorType.errorMessage(cxt, IMErrorType.ErrorLoginFailure));
             }
 
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 Log.i(TAG, "SstatusCode=" + statusCode + "responseString=" + responseString);
             }
 
@@ -332,12 +331,12 @@ public class ImManager {
 
 
             @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 SafeHandler.onFailure(handler, IMErrorType.errorMessage(cxt, IMErrorType.ErrorLoginFailure));
             }
 
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 Log.i(TAG, "SstatusCode=" + statusCode + "responseString=" + responseString);
 
             }
@@ -371,12 +370,12 @@ public class ImManager {
 
 
             @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 SafeHandler.onFailure(handler, IMErrorType.errorMessage(cxt, IMErrorType.ErrorLoginFailure));
             }
 
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 Log.i(TAG, "SstatusCode=" + statusCode + "responseString=" + responseString);
             }
 

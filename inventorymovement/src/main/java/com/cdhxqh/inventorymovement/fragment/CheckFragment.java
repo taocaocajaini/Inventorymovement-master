@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * 库存盘点
  */
-public class CheckFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener{
+public class CheckFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
     private static final String TAG = "CheckFragment";
     private static final int RESULT_ADD_TOPIC = 100;
     /**
@@ -46,7 +46,7 @@ public class CheckFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     InvAdapter invAdapter;
 
-    private static final  int mark = 0;
+    private static final int mark = 0;
 
 
     @Override
@@ -73,7 +73,7 @@ public class CheckFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list_topics);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        invAdapter = new InvAdapter(getActivity(),mark);
+        invAdapter = new InvAdapter(getActivity(), mark);
         mRecyclerView.setAdapter(invAdapter);
         mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         mSwipeLayout.setColor(R.color.holo_blue_bright,
@@ -97,7 +97,6 @@ public class CheckFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
 
-
     /**
      * 获取库存项目信息*
      */
@@ -119,13 +118,7 @@ public class CheckFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                     if (items == null || items.isEmpty()) {
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-                        if (page == 1) {
-                            invAdapter = new InvAdapter(getActivity(),mark);
-                            mRecyclerView.setAdapter(invAdapter);
-                        }
-                        if (totalPages == page) {
-                            invAdapter.adddate(items);
-                        }
+                        invAdapter.adddate(items);
                     }
 
                 } catch (IOException e) {

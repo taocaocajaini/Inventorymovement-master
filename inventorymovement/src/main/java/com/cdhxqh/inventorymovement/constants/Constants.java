@@ -12,9 +12,10 @@ public class Constants {
      * 基础接口*
      */
     //生产IP地址
-//    public static final String HTTP_IP_URL = "http://10.192.170.21:9083";
+    public static final String HTTP_IP_URL = "http://10.192.170.21:9083";
+//    public static final String HTTP_IP_URL = "http://maximo7app.dms.yudean.com";
     //测试Ip地址
-    public static final String HTTP_IP_URL = "http://10.28.15.14:7003";
+//    public static final String HTTP_IP_URL = "http://10.28.15.14:7003";
 
     public static final String HTTP_API_URL = HTTP_IP_URL + "/maximo/mobile/";
 

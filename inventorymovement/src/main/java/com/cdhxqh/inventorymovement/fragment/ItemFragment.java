@@ -135,13 +135,7 @@ public class ItemFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     if (items == null || items.isEmpty()) {
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-                        if (page == 1) {
-                            itemAdapter = new ItemAdapter(getActivity());
-                            mRecyclerView.setAdapter(itemAdapter);
-                        }
-                        if (totalPages == page) {
-                            itemAdapter.adddate(items);
-                        }
+                        itemAdapter.adddate(items);
                     }
 
                 } catch (IOException e) {

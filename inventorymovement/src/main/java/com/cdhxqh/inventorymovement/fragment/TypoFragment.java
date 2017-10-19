@@ -78,6 +78,8 @@ public class TypoFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 //    private static final int mark=0; //库存转移标识
 
+    private int curPage; //当前页
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,6 +218,8 @@ public class TypoFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
+                Log.e(TAG, "currentPage=" + currentPage);
+                curPage = currentPage;
                 mProgressDialog.dismiss();
                 mSwipeLayout.setRefreshing(false);
                 mSwipeLayout.setLoading(false);
@@ -339,8 +343,12 @@ public class TypoFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onLoad() {
         mSwipeLayout.setLoading(false);
-        page++;
-        getPoLineList();
+        if (curPage == page) {
+            MessageUtils.showMiddleToast(getActivity(), "已加载出全部数据");
+        } else {
+            page++;
+            getPoLineList();
+        }
     }
 
     class ChildThread extends Thread {
