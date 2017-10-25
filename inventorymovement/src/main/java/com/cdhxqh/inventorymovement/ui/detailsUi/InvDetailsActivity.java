@@ -18,6 +18,7 @@ import com.cdhxqh.inventorymovement.bean.Results;
 import com.cdhxqh.inventorymovement.model.Invbalances;
 import com.cdhxqh.inventorymovement.model.Inventory;
 import com.cdhxqh.inventorymovement.ui.BaseActivity;
+import com.cdhxqh.inventorymovement.utils.MessageUtils;
 import com.cdhxqh.inventorymovement.wight.SwipeRefreshLayout;
 
 import java.io.IOException;
@@ -74,6 +75,8 @@ public class InvDetailsActivity extends BaseActivity implements SwipeRefreshLayo
     KcckInvbalancesAdapter kcckInvbalancesAdapter;
 
     private int page = 1;
+
+    private int currentpage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +171,7 @@ public class InvDetailsActivity extends BaseActivity implements SwipeRefreshLayo
 
     @Override
     public void onRefresh() {
-
+        kcckInvbalancesAdapter.removeAllData();
         page = 1;
         getItemList(inventory.itemnum, inventory.location, "");
         mSwipeLayout.setRefreshing(false);
@@ -177,8 +180,13 @@ public class InvDetailsActivity extends BaseActivity implements SwipeRefreshLayo
 
     @Override
     public void onLoad() {
-        page++;
-        getItemList(inventory.itemnum, inventory.location, "");
+        if (currentpage == page) {
+            MessageUtils.showMiddleToast(InvDetailsActivity.this, "已加载出全部数据");
+            mSwipeLayout.setLoading(false);
+        } else {
+            page++;
+            getItemList(inventory.itemnum, inventory.location, "");
+        }
     }
 
     private void initAdapter() {
@@ -201,7 +209,7 @@ public class InvDetailsActivity extends BaseActivity implements SwipeRefreshLayo
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-
+                currentpage = currentPage;
                 ArrayList<Invbalances> items = null;
                 try {
                     items = Ig_Json_Model.parseInvbalancesFromString(results.getResultlist());
@@ -212,12 +220,7 @@ public class InvDetailsActivity extends BaseActivity implements SwipeRefreshLayo
                         notLinearLayout.setVisibility(View.VISIBLE);
 
                     } else {
-                        if (page == 1) {
-                            initAdapter();
-                        }
-                        if (totalPages == page) {
-                            kcckInvbalancesAdapter.adddate(items);
-                        }
+                        kcckInvbalancesAdapter.adddate(items);
                     }
 
                 } catch (IOException e) {

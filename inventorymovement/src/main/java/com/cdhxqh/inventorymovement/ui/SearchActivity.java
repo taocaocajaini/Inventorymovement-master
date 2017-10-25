@@ -139,7 +139,7 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
             mRecyclerView.setAdapter(itemAdapter);
         } else if (search_mark == PO_MARK) {//入库管理
             poAdapter = new PoAdapter(SearchActivity.this);
-            mRecyclerView.setAdapter(itemreqAdapter);
+            mRecyclerView.setAdapter(poAdapter);
             codeImage.setVisibility(View.VISIBLE);
         } else if (search_mark == WORKORDER_MARK) {//出库管理
             workOrderAdapter = new WorkOrderAdapter(SearchActivity.this);
@@ -149,11 +149,11 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
             itemreqAdapter = new ItemreqAdapter(SearchActivity.this);
             mRecyclerView.setAdapter(itemreqAdapter);
         } else if (search_mark == CHECK_MARK) {//库存盘点
-            invAdapter = new InvAdapter(SearchActivity.this, 1);
+            invAdapter = new InvAdapter(SearchActivity.this, 0);
             mRecyclerView.setAdapter(invAdapter);
             codeImage.setVisibility(View.VISIBLE);
         } else if (search_mark == INV_MARK) {//库存使用情况
-            invAdapter = new InvAdapter(SearchActivity.this, 0);
+            invAdapter = new InvAdapter(SearchActivity.this, 1);
             mRecyclerView.setAdapter(invAdapter);
             codeImage.setVisibility(View.VISIBLE);
         } else if (search_mark == LOCATION_MARK) {//库存转移
@@ -234,18 +234,25 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
                 mSwipeLayout.setRefreshing(true);
                 notLinearLayout.setVisibility(View.GONE);
                 if (search_mark == ITEM_MARK) { //主项目
+                    itemAdapter.removeAllData();
                     getItemList(search);
                 } else if (search_mark == PO_MARK) {//入库管理
+                    poAdapter.removeAllData();
                     getPoList(search);
                 } else if (search_mark == CHECK_MARK) { //库存盘点
+                    invAdapter.removeAllData();
                     getInvList(search, 0);
                 } else if (search_mark == INV_MARK) { //库存使用情况
+                    invAdapter.removeAllData();
                     getInvList(search, 1);
                 } else if (search_mark == WORKORDER_MARK) {//出库管理
+                    workOrderAdapter.removeAllData();
                     getWorkorderList(search);
                 } else if (search_mark == LOCATION_MARK) { //库存转移
+                    locationsAdapter.removeAllData();
                     getLocationsList(search);
                 } else if (search_mark == ITEMREQ_MARK) {//物资编码申请
+                    itemreqAdapter.removeAllData();
                     getItemreqList(search);
                 }
                 return true;
@@ -280,13 +287,7 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
                         itemAdapter.notifyDataSetChanged();
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-                        if (page == 1) {
-                            itemAdapter = new ItemAdapter(SearchActivity.this);
-                            mRecyclerView.setAdapter(itemAdapter);
-                        }
-                        if (totalPages == page) {
-                            itemAdapter.adddate(items);
-                        }
+                        itemAdapter.adddate(items);
                     }
 
                 } catch (IOException e) {
@@ -326,13 +327,8 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
                         poAdapter.notifyDataSetChanged();
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-                        if (page == 1) {
-                            poAdapter = new PoAdapter(SearchActivity.this);
-                            mRecyclerView.setAdapter(poAdapter);
-                        }
-                        if (page == totalPages) {
-                            poAdapter.adddate(items);
-                        }
+                        poAdapter.adddate(items);
+                        poAdapter.notifyDataSetChanged();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -365,6 +361,7 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
                 ArrayList<WorkOrder> items = null;
                 try {
                     items = Ig_Json_Model.parseWorkOrderFromString(results.getResultlist());
+
                     mSwipeLayout.setRefreshing(false);
                     mSwipeLayout.setLoading(false);
                     if (items == null || items.isEmpty()) {
@@ -372,13 +369,7 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
                         workOrderAdapter.notifyDataSetChanged();
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-                        if (page == 1) {
-                            workOrderAdapter = new WorkOrderAdapter(SearchActivity.this);
-                            mRecyclerView.setAdapter(workOrderAdapter);
-                        }
-                        if (totalPages == page) {
-                            workOrderAdapter.adddate(items);
-                        }
+                        workOrderAdapter.adddate(items);
                     }
 
                 } catch (IOException e) {
@@ -414,13 +405,7 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
                 if (items == null || items.isEmpty()) {
                     notLinearLayout.setVisibility(View.VISIBLE);
                 } else {
-                    if (page == 1) {
-                        itemreqAdapter = new ItemreqAdapter(SearchActivity.this);
-                        mRecyclerView.setAdapter(itemreqAdapter);
-                    }
-                    if (page == totalPages) {
-                        itemreqAdapter.adddate(items);
-                    }
+                    itemreqAdapter.adddate(items);
                 }
             }
 
@@ -453,13 +438,7 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
                     if (items == null || items.isEmpty()) {
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-                        if (page == 1) {
-                            locationsAdapter = new LocationsAdapter(SearchActivity.this, 0);
-                            mRecyclerView.setAdapter(locationsAdapter);
-                        }
-                        if (totalPages == page) {
-                            locationsAdapter.adddate(items);
-                        }
+                        locationsAdapter.adddate(items);
                     }
 
                 } catch (IOException e) {
@@ -503,13 +482,7 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
                         }
                     } else {
 
-                        if (page == 1) {
-                            invAdapter = new InvAdapter(SearchActivity.this, mark);
-                            mRecyclerView.setAdapter(invAdapter);
-                        }
-//                        if (totalPages == page) {
                         invAdapter.adddate(items);
-//                        }
                     }
 
                 } catch (IOException e) {
@@ -553,18 +526,32 @@ public class SearchActivity extends BaseActivity implements SwipeRefreshLayout.O
     public void onRefresh() {
         page = 1;
         if (search_mark == ITEM_MARK) { //主项目
+            itemAdapter.removeAllData();
+            itemAdapter.notifyDataSetChanged();
             getItemList(search);
         } else if (search_mark == PO_MARK) {//入库管理
+            poAdapter.removeAllData();
+            poAdapter.notifyDataSetChanged();
             getPoList(search);
         } else if (search_mark == WORKORDER_MARK) {//出库管理
+            workOrderAdapter.removeAllData();
+            workOrderAdapter.notifyDataSetChanged();
             getWorkorderList(search);
         } else if (search_mark == CHECK_MARK) { //库存盘点
+            invAdapter.removeAllData();
+            invAdapter.notifyDataSetChanged();
             getInvList(search, 0);
         } else if (search_mark == INV_MARK) { //库存使用情况
+            invAdapter.removeAllData();
+            invAdapter.notifyDataSetChanged();
             getInvList(search, 1);
         } else if (search_mark == LOCATION_MARK) { //库存转移
+            locationsAdapter.removeAllData();
+            locationsAdapter.notifyDataSetChanged();
             getLocationsList(search);
         } else if (search_mark == ITEMREQ_MARK) {//物资编码申请
+            itemreqAdapter.removeAllData();
+            itemreqAdapter.notifyDataSetChanged();
             getItemreqList(search);
         }
     }

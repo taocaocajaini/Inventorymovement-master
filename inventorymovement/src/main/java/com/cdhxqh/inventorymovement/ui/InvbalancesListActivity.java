@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -25,6 +24,7 @@ import com.cdhxqh.inventorymovement.api.ig_json.Ig_Json_Model;
 import com.cdhxqh.inventorymovement.bean.Results;
 import com.cdhxqh.inventorymovement.model.Invbalances;
 import com.cdhxqh.inventorymovement.model.Matrectrans;
+import com.cdhxqh.inventorymovement.utils.MessageUtils;
 import com.cdhxqh.inventorymovement.wight.SwipeRefreshLayout;
 
 import java.io.IOException;
@@ -77,6 +77,8 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
     private String location;
 
     private int mark;
+
+    private int currentpage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +162,9 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
         getItemList(location, "");
     }
 
-    /**初始化适配器**/
+    /**
+     * 初始化适配器
+     **/
     private void initAdapter() {
         invbalancesAdapter = new InvbalancesAdapter(InvbalancesListActivity.this);
         mRecyclerView.setAdapter(invbalancesAdapter);
@@ -171,7 +175,7 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("invbalances", item);
                 intent.putExtras(bundle);
-                startActivityForResult(intent,0);
+                startActivityForResult(intent, 0);
             }
         });
     }
@@ -263,8 +267,7 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-
-                Log.i(TAG, "results=" + results.getResultlist());
+                currentpage = currentPage;
                 ArrayList<Invbalances> items = null;
                 try {
                     items = Ig_Json_Model.parseInvbalancesFromString(results.getResultlist());
@@ -277,9 +280,7 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
                         if (page == 1) {
                             initAdapter();
                         }
-                        if (totalPages == page) {
-                            invbalancesAdapter.adddate(items);
-                        }
+                        invbalancesAdapter.adddate(items);
                     }
 
                 } catch (IOException e) {
@@ -301,9 +302,15 @@ public class InvbalancesListActivity extends BaseActivity implements SwipeRefres
 
     @Override
     public void onLoad() {
-        page++;
-        mSwipeLayout.setLoading(true);
-        getItemList(location, search);
+        if (currentpage == page) {
+            MessageUtils.showMiddleToast(InvbalancesListActivity.this, "已加载出全部数据");
+            mSwipeLayout.setLoading(false);
+        } else {
+            page++;
+            mSwipeLayout.setLoading(true);
+            getItemList(location, search);
+        }
+
     }
 
     @Override

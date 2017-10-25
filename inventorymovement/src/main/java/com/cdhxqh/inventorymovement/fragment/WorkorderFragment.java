@@ -118,13 +118,7 @@ public class WorkorderFragment extends Fragment implements SwipeRefreshLayout.On
                     if (items == null || items.isEmpty()) {
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-                        if (page == 1) {
-                            workOrderAdapter = new WorkOrderAdapter(getActivity());
-                            mRecyclerView.setAdapter(workOrderAdapter);
-                        }
-                        if (totalPages == page) {
                             workOrderAdapter.adddate(items);
-                        }
                     }
 
                 } catch (IOException e) {

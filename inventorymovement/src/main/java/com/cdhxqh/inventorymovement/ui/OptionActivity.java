@@ -25,7 +25,6 @@ import com.cdhxqh.inventorymovement.R;
 import com.cdhxqh.inventorymovement.adapter.OptionAdapter;
 import com.cdhxqh.inventorymovement.api.HttpRequestHandler;
 import com.cdhxqh.inventorymovement.api.ImManager;
-import com.cdhxqh.inventorymovement.api.JsonUtils;
 import com.cdhxqh.inventorymovement.api.ig_json.Ig_Json_Model;
 import com.cdhxqh.inventorymovement.bean.Results;
 import com.cdhxqh.inventorymovement.constants.Constants;
@@ -182,6 +181,7 @@ public class OptionActivity extends BaseActivity implements SwipeRefreshLayout.O
                                     OptionActivity.this.getCurrentFocus()
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
+                    nodatalayout.setVisibility(View.GONE);
                     searchText = search.getText().toString();
                     optionAdapter = new OptionAdapter(OptionActivity.this);
                     recyclerView.setAdapter(optionAdapter);
@@ -223,9 +223,7 @@ public class OptionActivity extends BaseActivity implements SwipeRefreshLayout.O
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            if (totalPages == page) {
                                 optionAdapter.addPersonDate(items);
-                            }
                         }
                         if (optionAdapter.getItemCount() == 0) {
                             nodatalayout.setVisibility(View.VISIBLE);

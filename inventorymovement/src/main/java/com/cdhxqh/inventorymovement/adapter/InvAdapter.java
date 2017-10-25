@@ -108,6 +108,12 @@ public class InvAdapter extends RecyclerView.Adapter<InvAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+
+    public void removeAllData() {
+        if (mInventorys.size() > 0) {
+            mInventorys.removeAll(mInventorys);
+        }
+    }
     static class ViewHolder extends RecyclerView.ViewHolder {
         /**
          * CardView*

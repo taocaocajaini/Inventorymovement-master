@@ -229,7 +229,6 @@ public class TypoFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     if (items == null || items.isEmpty()) {
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-
                         polineAdapter.adddate(items);
                     }
 

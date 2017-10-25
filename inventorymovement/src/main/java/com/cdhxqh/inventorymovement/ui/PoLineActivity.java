@@ -161,9 +161,7 @@ public class PoLineActivity extends BaseActivity implements SwipeRefreshLayout.O
                             polineAdapter = new PolineAdapter(PoLineActivity.this);
                             mRecyclerView.setAdapter(polineAdapter);
                         }
-                        if (totalPages == page) {
-                            polineAdapter.adddate(items);
-                        }
+                        polineAdapter.adddate(items);
                     }
 
                 } catch (IOException e) {

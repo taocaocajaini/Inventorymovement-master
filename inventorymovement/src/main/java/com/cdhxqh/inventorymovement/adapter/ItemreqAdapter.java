@@ -96,6 +96,12 @@ public class ItemreqAdapter extends RecyclerView.Adapter<ItemreqAdapter.ViewHold
         notifyDataSetChanged();
     }
 
+    public void removeAllData() {
+        if (mItemreqs.size() > 0) {
+            mItemreqs.removeAll(mItemreqs);
+        }
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         /**
          * CardView*

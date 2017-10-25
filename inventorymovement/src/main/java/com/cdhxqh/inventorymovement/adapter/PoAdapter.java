@@ -25,7 +25,6 @@ public class PoAdapter extends RecyclerView.Adapter<PoAdapter.ViewHolder> {
     private static final String TAG = "PoAdapter";
     Context mContext;
     ArrayList<Po> mPos = new ArrayList<Po>();
-//    V2EXDataSource mDataSource = Application.getDataSource();
 
     public PoAdapter(Context context) {
         mContext = context;

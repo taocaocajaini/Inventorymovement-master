@@ -88,6 +88,8 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
      */
     private ProgressDialog mProgressDialog;
 
+    private int currentpage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -235,7 +237,7 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-
+                currentpage = currentPage;
                 ArrayList<Invbalances> items = null;
                 try {
                     items = Ig_Json_Model.parseInvbalancesFromString(results.getResultlist());
@@ -244,14 +246,9 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
                     if (items == null || items.isEmpty()) {
                         cInvbalancesAdapter.removeAllData();
                         notLinearLayout.setVisibility(View.VISIBLE);
-
                     } else {
-                        if (page == 1) {
-                            initAdapter();
-                        }
-                        if (totalPages == page) {
-                            cInvbalancesAdapter.adddate(items);
-                        }
+
+                        cInvbalancesAdapter.adddate(items);
                     }
 
                 } catch (IOException e) {
@@ -274,12 +271,19 @@ public class CInvbalancesActivity extends BaseActivity implements SwipeRefreshLa
 
     @Override
     public void onLoad() {
-        page++;
-        getItemList(inventory.itemnum, inventory.location, search);
+        if (currentpage == page) {
+            MessageUtils.showMiddleToast(CInvbalancesActivity.this, "已加载出全部数据");
+            mSwipeLayout.setLoading(false);
+        } else {
+            page++;
+            getItemList(inventory.itemnum, inventory.location, search);
+        }
+
     }
 
     @Override
     public void onRefresh() {
+        cInvbalancesAdapter.removeAllData();
         page = 1;
         getItemList(inventory.itemnum, inventory.location, search);
         mSwipeLayout.setRefreshing(false);

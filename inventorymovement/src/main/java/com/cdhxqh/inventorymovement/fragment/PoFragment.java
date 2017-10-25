@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * 入库管理列表*
  */
-public class PoFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener{
+public class PoFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
     private static final String TAG = "PoFragment";
     private static final int RESULT_ADD_TOPIC = 100;
     /**
@@ -96,13 +96,12 @@ public class PoFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     }
 
 
-
     /**
      * 获取入库管理*
      */
 
     private void getPoList() {
-        ImManager.getDataPagingInfo(getActivity(), ImManager.setPoUrl("",page, 20), new HttpRequestHandler<Results>() {
+        ImManager.getDataPagingInfo(getActivity(), ImManager.setPoUrl("", page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -117,14 +116,8 @@ public class PoFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     mSwipeLayout.setLoading(false);
                     if (items == null || items.isEmpty()) {
                         notLinearLayout.setVisibility(View.VISIBLE);
-                    } else{
-                        if(page == 1){
-                            poAdapter = new PoAdapter(getActivity());
-                            mRecyclerView.setAdapter(poAdapter);
-                        }
-                        if(page == totalPages) {
-                            poAdapter.adddate(items);
-                        }
+                    } else {
+                        poAdapter.adddate(items);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

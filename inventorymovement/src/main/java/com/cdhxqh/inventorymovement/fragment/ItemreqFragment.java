@@ -4,25 +4,18 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.cdhxqh.inventorymovement.R;
-import com.cdhxqh.inventorymovement.adapter.InvAdapter;
 import com.cdhxqh.inventorymovement.adapter.ItemreqAdapter;
-import com.cdhxqh.inventorymovement.adapter.LocationsAdapter;
 import com.cdhxqh.inventorymovement.api.HttpRequestHandler;
 import com.cdhxqh.inventorymovement.api.ImManager;
-import com.cdhxqh.inventorymovement.api.JsonUtils;
 import com.cdhxqh.inventorymovement.api.ig_json.Ig_Json_Model;
 import com.cdhxqh.inventorymovement.bean.Results;
-import com.cdhxqh.inventorymovement.model.Inventory;
 import com.cdhxqh.inventorymovement.model.Itemreq;
-import com.cdhxqh.inventorymovement.model.Locations;
 import com.cdhxqh.inventorymovement.wight.SwipeRefreshLayout;
 
 import java.io.IOException;
@@ -31,7 +24,7 @@ import java.util.ArrayList;
 /**
  * 物资编码申请列表*
  */
-public class ItemreqFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener{
+public class ItemreqFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
     private static final String TAG = "ItemreqFragment";
     private static final int RESULT_ADD_TOPIC = 100;
     /**
@@ -102,7 +95,6 @@ public class ItemreqFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
 
-
     /**
      * 获取库存项目信息*
      */
@@ -124,13 +116,7 @@ public class ItemreqFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     if (items == null || items.isEmpty()) {
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-                        if (page == 1) {
-                            itemreqAdapter = new ItemreqAdapter(getActivity());
-                            mRecyclerView.setAdapter(itemreqAdapter);
-                        }
-                        if (totalPages == page) {
-                            itemreqAdapter.adddate(items);
-                        }
+                        itemreqAdapter.adddate(items);
                     }
 
                 } catch (IOException e) {

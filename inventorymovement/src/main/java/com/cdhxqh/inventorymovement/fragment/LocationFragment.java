@@ -1,8 +1,6 @@
 package com.cdhxqh.inventorymovement.fragment;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +11,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.cdhxqh.inventorymovement.R;
-import com.cdhxqh.inventorymovement.adapter.ItemAdapter;
 import com.cdhxqh.inventorymovement.adapter.LocationsAdapter;
 import com.cdhxqh.inventorymovement.api.HttpRequestHandler;
 import com.cdhxqh.inventorymovement.api.ImManager;
 import com.cdhxqh.inventorymovement.api.ig_json.Ig_Json_Model;
 import com.cdhxqh.inventorymovement.bean.Results;
-import com.cdhxqh.inventorymovement.model.Item;
 import com.cdhxqh.inventorymovement.model.Locations;
 import com.cdhxqh.inventorymovement.wight.SwipeRefreshLayout;
 
@@ -29,7 +25,7 @@ import java.util.ArrayList;
 /**
  * 库存转移列表*
  */
-public class LocationFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener{
+public class LocationFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
     private static final String TAG = "LocationFragment";
     private static final int RESULT_ADD_TOPIC = 100;
     /**
@@ -51,7 +47,7 @@ public class LocationFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private int page = 1;
 
-    private static final int mark=0; //库存转移标识
+    private static final int mark = 0; //库存转移标识
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +73,7 @@ public class LocationFragment extends Fragment implements SwipeRefreshLayout.OnR
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list_topics);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        locationsAdapter = new LocationsAdapter(getActivity(),mark);
+        locationsAdapter = new LocationsAdapter(getActivity(), mark);
         mRecyclerView.setAdapter(locationsAdapter);
         mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         mSwipeLayout.setColor(R.color.holo_blue_bright,
@@ -102,13 +98,12 @@ public class LocationFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
 
-
     /**
      * 获取库存转移位置信息*
      */
 
     private void getItemList() {
-        ImManager.getDataPagingInfo(getActivity(), ImManager.serLocationsUrl("",page, 20), new HttpRequestHandler<Results>() {
+        ImManager.getDataPagingInfo(getActivity(), ImManager.serLocationsUrl("", page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -124,13 +119,7 @@ public class LocationFragment extends Fragment implements SwipeRefreshLayout.OnR
                     if (items == null || items.isEmpty()) {
                         notLinearLayout.setVisibility(View.VISIBLE);
                     } else {
-                        if (page == 1) {
-                            locationsAdapter = new LocationsAdapter(getActivity(),mark);
-                            mRecyclerView.setAdapter(locationsAdapter);
-                        }
-                        if (totalPages == page) {
-                            locationsAdapter.adddate(items);
-                        }
+                        locationsAdapter.adddate(items);
                     }
 
                 } catch (IOException e) {
